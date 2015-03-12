@@ -25,6 +25,6 @@ defmodule Eetoul.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [{:geef, git: "https://github.com/ramonsnir/geef.git"}]
   end
 end
