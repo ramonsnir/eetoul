@@ -5,25 +5,16 @@ defmodule Eetoul.Mixfile do
     [app: :eetoul,
      version: "0.0.1",
      elixir: "~> 1.0",
-     deps: deps]
+     deps: deps,
+		 default_task: "escript.build",
+		 escript: escript]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
-  def application do
-    [applications: [:logger]]
-  end
+	def escript do
+		[main_module: Eetoul,
+		 path: "bin/eetoul"]
+	end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type `mix help deps` for more examples and options
   defp deps do
     [{:geef, git: "https://github.com/ramonsnir/geef.git"}]
   end
