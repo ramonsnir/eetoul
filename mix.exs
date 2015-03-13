@@ -10,12 +10,17 @@ defmodule Eetoul.Mixfile do
 		 escript: escript]
   end
 
+	def application do
+		[applications: [:logger]]
+	end
+
 	def escript do
 		[main_module: Eetoul,
 		 path: "bin/eetoul"]
 	end
 
   defp deps do
-    [{:geef, git: "https://github.com/ramonsnir/geef.git"}]
+    [{:geef, git: "https://github.com/ramonsnir/geef.git"},
+		 colorful: "~> 0.6.0"]
   end
 end
