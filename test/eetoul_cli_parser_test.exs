@@ -24,37 +24,43 @@ defmodule EetoulCLIParserTest do
 			{:error, "The path 'first-branch' does not exist in the given tree"}
 	end
 	
-  test "`edit <release>`" do
-    assert CLI.test_cli_argument_parser(["edit", "foo"]) ==
-			%{release: "foo"}
+  test "`edit <release>`", meta do
+    assert CLI.test_cli_argument_parser(meta[:repo], ["edit", "first-release"]) ==
+			%{release: "first-release"}
   end
 
-  test "`edit <release> --amend`" do
-    assert CLI.test_cli_argument_parser(["edit", "foo", "--amend"]) ==
-			%{release: "foo", amend: true}
+  test "`edit <wrong-release>` fails", meta do
+		assert_raise ParseError, "the release \"zeroth-release\" does not exist", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["edit", "zeroth-release"]
+		end
   end
 
-  test "`edit` fails" do
+  test "`edit <release> --amend`", meta do
+    assert CLI.test_cli_argument_parser(meta[:repo], ["edit", "first-release", "--amend"]) ==
+			%{release: "first-release", amend: true}
+  end
+
+  test "`edit` fails", meta do
     assert_raise ParseError, "no release was specified", fn ->
-			CLI.test_cli_argument_parser ["edit"]
+			CLI.test_cli_argument_parser meta[:repo], ["edit"]
 		end
   end
 
-  test "`edit <release> arg` fails" do
+  test "`edit <release> arg` fails", meta do
     assert_raise ParseError, "invalid arguments", fn ->
-			CLI.test_cli_argument_parser ["edit", "foo", "arg"]
+			CLI.test_cli_argument_parser meta[:repo], ["edit", "first-release", "arg"]
 		end
   end
 
-  test "`edit <release> --amend arg` fails" do
+  test "`edit <release> --amend arg` fails", meta do
     assert_raise ParseError, "invalid arguments", fn ->
-			CLI.test_cli_argument_parser ["edit", "foo", "--amend", "arg"]
+			CLI.test_cli_argument_parser meta[:repo], ["edit", "first-release", "--amend", "arg"]
 		end
   end
 
-  test "`noop` fails with ParseError" do
+  test "`noop` fails with ParseError", meta do
     assert_raise ParseError, "unknown command noop", fn ->
-			CLI.test_cli_argument_parser ["noop"]
+			CLI.test_cli_argument_parser meta[:repo], ["noop"]
 		end
   end
 end

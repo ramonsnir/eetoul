@@ -6,14 +6,14 @@ defmodule Eetoul.CLIDSL do
 
 			@before_compile Eetoul.CLIDSL
 
-			defp cli_command(command, options \\ [])
+			defp cli_command(repo, command, options \\ [])
 		end
 	end
 
 	@doc false
 	defmacro __before_compile__(_env) do
 		quote do
-			defp cli_command(command, _options) do
+			defp cli_command repo, command, _options do
 				raise Eetoul.CLI.ParseError, message: "unknown command #{command}"
 			end
 		end
@@ -22,17 +22,17 @@ defmodule Eetoul.CLIDSL do
 	@doc false
 	defmacro command name, do: block do
 		quote do
-			defp cli_command([unquote(Atom.to_string name) | args], options) do
+			defp cli_command repo, [unquote(Atom.to_string name) | args], options do
 				if options[:dryrun] do
 					var!(run) = fn args -> args end
 				else
-					var!(run) = fn args -> run_command unquote(name), args end
+					var!(run) = fn args -> run_command repo, unquote(name), args end
 				end
 				var!(arguments) = []
 				unquote block
 				var!(arguments)
 				|> Enum.reverse
-				|> parse_arguments(args)
+				|> (fn specs -> parse_arguments(repo, specs, args) end).()
 				|> var!(run).()
 			end
 		end
@@ -41,7 +41,7 @@ defmodule Eetoul.CLIDSL do
 	@doc false
 	defmacro release name do
 		quote do
-			var!(arguments) = [{:release, unquote(name)} | var!(arguments)]
+			var!(arguments) = [{:release, unquote(name), :existing} | var!(arguments)]
 		end
 	end
 
