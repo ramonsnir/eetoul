@@ -1,8 +1,29 @@
 defmodule EetoulCLIParserTest do
   use ExUnit.Case
+	use Geef
 	alias Eetoul.CLI
 	alias Eetoul.CLI.ParseError
+	alias Eetoul.Test.SampleSpecRepo
 
+	setup_all do
+		{a, b, c} = :erlang.now
+		:random.seed a, b, c
+		path = "tmp-#{:random.uniform 1000000}"
+		case SampleSpecRepo.create path do
+			{:ok, repo} ->
+				on_exit fn -> File.rm_rf path end
+				{:ok, repo: repo}
+			e -> e
+		end
+	end
+
+	test "read_spec utility method", meta do
+		assert CLI.read_spec(meta[:repo], "first-release") ==
+			{:ok, ""}
+		assert CLI.read_spec(meta[:repo], "first-branch") ==
+			{:error, "The path 'first-branch' does not exist in the given tree"}
+	end
+	
   test "`edit <release>`" do
     assert CLI.test_cli_argument_parser(["edit", "foo"]) ==
 			%{release: "foo"}

@@ -20,7 +20,8 @@ defmodule Eetoul.Mixfile do
 	end
 
   defp deps do
-    [{:geef, git: "https://github.com/ramonsnir/geef.git"},
-		 colorful: "~> 0.6.0"]
+		[{:geef, git: "https://github.com/ramonsnir/geef.git"},
+		 {:colorful, "~> 0.6.0"},
+		 {:monad, "~> 1.0.4"}]
   end
 end

@@ -3,6 +3,8 @@ defmodule Eetoul.CLI.ParseError do
 end
 
 defmodule Eetoul.CLI do
+	use Geef
+	require Monad.Error, as: Error
 	use Eetoul.CLIDSL
 	alias Eetoul.CLI.ParseError
 
@@ -40,5 +42,17 @@ defmodule Eetoul.CLI do
 	defp run_command name, data do
 		# TODO implement
 		IO.inspect {name, data}
+	end
+
+	def read_spec repo, spec do
+		Error.m do
+			%Reference{target: commit_id} <- Reference.lookup(repo, "refs/heads/eetoul-spec")
+			commit <- Commit.lookup(repo, commit_id)
+			tree <- Commit.tree(commit)
+			%TreeEntry{id: file_id} <- Tree.get(tree, spec)
+			blob <- Blob.lookup(repo, file_id)
+			content <- Blob.content(blob)
+			return content
+		end
 	end
 end
