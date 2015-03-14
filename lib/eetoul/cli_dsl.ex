@@ -46,6 +46,13 @@ defmodule Eetoul.CLIDSL do
 	end
 
 	@doc false
+	defmacro new_release name do
+		quote do
+			var!(arguments) = [{:release, unquote(name), :new} | var!(arguments)]
+		end
+	end
+
+	@doc false
 	defmacro flag name do
 		quote do
 			var!(arguments) = case var!(arguments) do

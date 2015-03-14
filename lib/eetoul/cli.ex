@@ -12,18 +12,30 @@ defmodule Eetoul.CLI do
 	def test_cli_argument_parser repo, argv do
 		cli_command repo, argv, dryrun: true
 	end
+	
+	command :create do
+		new_release :release
+	end
 
 	command :edit do
 		release :release
 		flag :amend
 	end
 
-	defp parse_arguments repo, [{:release, name, mode} | specs], [value | args] do
-		case {mode, read_spec(repo, value)} do
-			{:existing, {:ok, _}} ->
+	defp parse_arguments repo, [{:release, name, :existing} | specs], [value | args] do
+		case read_spec repo, value do
+			{:ok, _} ->
 				parse_arguments(repo, specs, args)
 				|> Dict.put(name, value)
 			_ -> raise ParseError, message: "the #{name} \"#{value}\" does not exist"
+		end
+	end
+	defp parse_arguments repo, [{:release, name, :new} | specs], [value | args] do
+		case read_spec repo, value do
+			{:error, _} ->
+				parse_arguments(repo, specs, args)
+				|> Dict.put(name, value)
+			_ -> raise ParseError, message: "the #{name} \"#{value}\" already exists"
 		end
 	end
 	defp parse_arguments _repo, [{:release, spec, _} | _], [] do

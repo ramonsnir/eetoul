@@ -58,6 +58,17 @@ defmodule EetoulCLIParserTest do
 		end
   end
 
+	test "`create <new-release>`", meta do
+		assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release"]) ==
+			%{release: "zeroth-release"}
+	end
+
+  test "`create <existing-release>` fails", meta do
+		assert_raise ParseError, "the release \"first-release\" already exists", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["create", "first-release"]
+		end
+  end
+
   test "`noop` fails with ParseError", meta do
     assert_raise ParseError, "unknown command noop", fn ->
 			CLI.test_cli_argument_parser meta[:repo], ["noop"]
