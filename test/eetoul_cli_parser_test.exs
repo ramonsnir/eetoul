@@ -9,9 +9,9 @@ defmodule EetoulCLIParserTest do
 		{a, b, c} = :erlang.now
 		:random.seed a, b, c
 		path = "tmp-#{:random.uniform 1000000}"
+		on_exit fn -> File.rm_rf path end
 		case SampleSpecRepo.create path do
 			{:ok, repo} ->
-				on_exit fn -> File.rm_rf path end
 				{:ok, repo: repo}
 			e -> e
 		end
