@@ -21,8 +21,9 @@ defmodule Eetoul.CLIDSL do
 
 	@doc false
 	defmacro command name, do: block do
+		command_name = String.replace(Atom.to_string(name), "_", "-")
 		quote do
-			defp cli_command repo, [unquote(Atom.to_string name) | args], options do
+			defp cli_command repo, [unquote(command_name) | args], options do
 				if options[:dryrun] do
 					var!(run) = fn args -> args end
 				else
@@ -49,6 +50,13 @@ defmodule Eetoul.CLIDSL do
 	defmacro new_release name do
 		quote do
 			var!(arguments) = [{:release, unquote(name), :new} | var!(arguments)]
+		end
+	end
+
+	@doc false
+	defmacro reference name do
+		quote do
+			var!(arguments) = [{:reference, unquote(name)} | var!(arguments)]
 		end
 	end
 

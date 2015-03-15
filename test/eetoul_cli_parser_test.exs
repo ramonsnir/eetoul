@@ -58,16 +58,43 @@ defmodule EetoulCLIParserTest do
 		end
   end
 
-	test "`create <new-release>`", meta do
-		assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release"]) ==
-			%{release: "zeroth-release"}
+	test "`create <new-release> <branch>`", meta do
+		assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-branch"]) ==
+			%{release: "zeroth-release", base_branch: "refs/heads/first-branch"}
 	end
 
-  test "`create <existing-release>` fails", meta do
-		assert_raise ParseError, "the release \"first-release\" already exists", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["create", "first-release"]
+	test "`create <new-release> <tag>`", meta do
+		assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-tag"]) ==
+			%{release: "zeroth-release", base_branch: "refs/tags/first-tag"}
+	end
+
+  test "`create <new-release> <wrong-branch>` fails", meta do
+		assert_raise ParseError, "the base_branch \"zeroth-branch\" does not exist", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["create", "zeroth-release", "zeroth-branch"]
 		end
   end
+
+  test "`create <existing-release> <branch>` fails", meta do
+		assert_raise ParseError, "the release \"first-release\" already exists", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["create", "first-release", "first-branch"]
+		end
+  end
+
+	test "`init`", meta do
+		assert CLI.test_cli_argument_parser(meta[:repo], ["init"]) ==
+			%{}
+	end
+
+	test "`specs-push`", meta do
+		assert CLI.test_cli_argument_parser(meta[:repo], ["specs-push"]) ==
+			%{}
+	end
+
+	test "`init <release>` fails", meta do
+		assert_raise ParseError, "invalid arguments starting with first-release", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["init", "first-release"]
+		end
+	end
 
   test "`noop` fails with ParseError", meta do
     assert_raise ParseError, "unknown command noop", fn ->

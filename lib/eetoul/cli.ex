@@ -12,9 +12,33 @@ defmodule Eetoul.CLI do
 	def test_cli_argument_parser repo, argv do
 		cli_command repo, argv, dryrun: true
 	end
-	
+
+	command :init, do: ()
+
+	command :specs_push do
+		flag :force
+	end
+
+	command :specs_pull do
+		flag :force
+	end
+
 	command :create do
 		new_release :release
+		reference :base_branch
+	end
+
+	command :make do
+		release :release
+	end
+
+	command :test do
+		release :release
+	end
+
+	command :push do
+		release :release
+		flag :force
 	end
 
 	command :edit do
@@ -38,9 +62,22 @@ defmodule Eetoul.CLI do
 			_ -> raise ParseError, message: "the #{name} \"#{value}\" already exists"
 		end
 	end
-	defp parse_arguments _repo, [{:release, spec, _} | _], [] do
-		raise ParseError, message: "no #{spec} was specified"
+	defp parse_arguments _repo, [{:release, name, _} | _], [] do
+		raise ParseError, message: "no #{name} was specified"
 	end
+
+	defp parse_arguments repo, [{:reference, name} | specs], [value | args] do
+		case Reference.dwim repo, value do
+			{:ok, %Reference{name: real_name}} ->
+				parse_arguments(repo, specs, args)
+				|> Dict.put(name, real_name)
+			_ -> raise ParseError, message: "the #{name} \"#{value}\" does not exist"
+		end
+	end
+	defp parse_arguments _repo, [{:reference, name} | _], [] do
+		raise ParseError, message: "no #{name} was specified"
+	end
+
 	defp parse_arguments repo, [{:options, spec} | []], args do
 		case OptionParser.parse(args, strict: spec) do
 			{options, [], []} -> Enum.into options, parse_arguments(repo, [], [])
@@ -50,6 +87,7 @@ defmodule Eetoul.CLI do
 	defp parse_arguments _repo, [{:options, _spec} | _], _args do
 		raise ParseError, message: ":options must be the last arguments specification"
 	end
+
 	defp parse_arguments(_repo, [], []), do: %{}
 	defp parse_arguments _repo, [], [arg | _args] do
 		raise ParseError, message: "invalid arguments starting with #{arg}"
