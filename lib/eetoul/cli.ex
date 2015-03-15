@@ -41,10 +41,31 @@ defmodule Eetoul.CLI do
 		flag :force
 	end
 
+	command :add_to do
+		release :release
+		reference :branch
+		flag :squash
+		flag :merge
+		string :message
+		validate "--squash and --merge cannot both be specified" do
+			!(opts[:squash] && opts[:merge])
+		end
+		validate "--message is requires if --squash or --merge are specified" do
+			!((opts[:squash] || opts[:merge]) && !opts[:message])
+		end
+	end
+
+	command :cat do
+		release :release
+		flag :color
+	end
+	
 	command :edit do
 		release :release
 		flag :amend
 	end
+
+	command :help, do: ()
 
 	defp parse_arguments repo, [{:release, name, :existing} | specs], [value | args] do
 		case read_spec repo, value do

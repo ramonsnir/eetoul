@@ -96,6 +96,23 @@ defmodule EetoulCLIParserTest do
 		end
 	end
 
+	test "`add-to <release> <branch> --squash --message \"foo bar\"`", meta do
+		assert CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--message", "foo bar"]) ==
+			%{release: "first-release", branch: "refs/heads/first-branch", squash: true, message: "foo bar"}
+	end
+
+	test "`add-to <release> <branch> --squash` fails", meta do
+		assert_raise ParseError, "--message is requires if --squash or --merge are specified", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash"]
+		end
+	end
+
+	test "`add-to <release> <branch> --squash --merge` fails", meta do
+		assert_raise ParseError, "--squash and --merge cannot both be specified", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--merge"]
+		end
+	end
+
   test "`noop` fails with ParseError", meta do
     assert_raise ParseError, "unknown command noop", fn ->
 			CLI.test_cli_argument_parser meta[:repo], ["noop"]
