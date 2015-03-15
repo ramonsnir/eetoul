@@ -16,7 +16,8 @@ defmodule Eetoul.Test.SampleSpecRepo do
 																%{"greeting" => "Hello world!"})
 		{:ok, _ref} = Reference.create repo, "refs/tags/first-tag", commit
 		{:ok, commit} = make_commit(repo, "Code Branch 2",
-																%{"greeting" => "Hello, all!"})
+																%{"greeting" => "Hello, all!"},
+																[commit])
 		{:ok, _ref} = Reference.create repo, "refs/heads/first-branch", commit
 
 		{:ok, repo}

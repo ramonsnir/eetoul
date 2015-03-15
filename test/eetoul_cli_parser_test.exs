@@ -4,12 +4,17 @@ defmodule EetoulCLIParserTest do
 	alias Eetoul.CLI
 	alias Eetoul.CLI.ParseError
 	alias Eetoul.Test.SampleSpecRepo
+	alias Eetoul.Test.SampleTreeRepo
 
 	setup_all do
 		{a, b, c} = :erlang.now
 		:random.seed a, b, c
 		path = "tmp-#{:random.uniform 1000000}"
+		File.rm_rf path
+		other_path = "tmp-#{:random.uniform 1000000}"
 		on_exit fn -> File.rm_rf path end
+		on_exit fn -> File.rm_rf other_path end
+		{:ok, _repo} = SampleTreeRepo.create other_path
 		case SampleSpecRepo.create path do
 			{:ok, repo} ->
 				{:ok, repo: repo}

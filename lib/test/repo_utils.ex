@@ -18,7 +18,7 @@ defmodule Eetoul.Test.RepoUtils do
 	end
 
 	@doc false
-	def make_commit repo, sig \\ nil, message, files do
+	def make_commit repo, message, files, parents \\ [], sig \\ nil do
 		unless sig do
 			sig = Signature.now "Eetoul Test", "test@eetoul"
 		end
@@ -32,6 +32,6 @@ defmodule Eetoul.Test.RepoUtils do
 			:ok = Index.add idx, entry
 		end
 		{:ok, tree_id} = Index.write_tree idx, repo
-		Commit.create repo, sig, sig, message, tree_id, []
+		Commit.create repo, sig, sig, message, tree_id, parents
 	end
 end
