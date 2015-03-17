@@ -65,14 +65,36 @@ defmodule Eetoul.CLI do
 		flag :amend
 	end
 
+	command :archive do
+		release :release
+		flag :force
+		string :as
+	end
+
+	command :unarchive do
+		archived_release :archived_release
+		flag :force
+	end
+
+	command :acat do
+		archived_release :archived_release
+		flag :color
+	end
+
 	command :help, do: ()
 
+	defp prettify_name name do
+		name
+		|> Atom.to_string
+		|> String.replace("_", " ")
+	end
+	
 	defp parse_arguments repo, [{:release, name, :existing} | specs], [value | args] do
 		case read_spec repo, value do
 			{:ok, _} ->
 				parse_arguments(repo, specs, args)
 				|> Dict.put(name, value)
-			_ -> raise ParseError, message: "the #{name} \"#{value}\" does not exist"
+			_ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" does not exist"
 		end
 	end
 	defp parse_arguments repo, [{:release, name, :new} | specs], [value | args] do
@@ -80,11 +102,19 @@ defmodule Eetoul.CLI do
 			{:error, _} ->
 				parse_arguments(repo, specs, args)
 				|> Dict.put(name, value)
-			_ -> raise ParseError, message: "the #{name} \"#{value}\" already exists"
+			_ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" already exists"
+		end
+	end
+	defp parse_arguments repo, [{:release, name, :archived} | specs], [value | args] do
+		case read_spec repo, ".archive/#{value}" do
+			{:ok, _} ->
+				parse_arguments(repo, specs, args)
+				|> Dict.put(name, value)
+			_ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" does not exist"
 		end
 	end
 	defp parse_arguments _repo, [{:release, name, _} | _], [] do
-		raise ParseError, message: "no #{name} was specified"
+		raise ParseError, message: "no #{prettify_name name} was specified"
 	end
 
 	defp parse_arguments repo, [{:reference, name} | specs], [value | args] do
@@ -92,11 +122,11 @@ defmodule Eetoul.CLI do
 			{:ok, %Reference{name: real_name}} ->
 				parse_arguments(repo, specs, args)
 				|> Dict.put(name, real_name)
-			_ -> raise ParseError, message: "the #{name} \"#{value}\" does not exist"
+			_ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" does not exist"
 		end
 	end
 	defp parse_arguments _repo, [{:reference, name} | _], [] do
-		raise ParseError, message: "no #{name} was specified"
+		raise ParseError, message: "no #{prettify_name name} was specified"
 	end
 
 	defp parse_arguments repo, [{:options, spec} | []], args do

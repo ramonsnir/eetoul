@@ -63,6 +63,13 @@ defmodule Eetoul.CLIDSL do
 	end
 
 	@doc false
+	defmacro archived_release name do
+		quote do
+			var!(arguments) = [{:release, unquote(name), :archived} | var!(arguments)]
+		end
+	end
+
+	@doc false
 	defmacro reference name do
 		quote do
 			var!(arguments) = [{:reference, unquote(name)} | var!(arguments)]

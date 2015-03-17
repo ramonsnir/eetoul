@@ -34,9 +34,15 @@ defmodule EetoulCLIParserTest do
 			%{release: "first-release"}
   end
 
-  test "`edit <wrong-release>` fails", meta do
+  test "`edit <new-release>` fails", meta do
 		assert_raise ParseError, "the release \"zeroth-release\" does not exist", fn ->
 			CLI.test_cli_argument_parser meta[:repo], ["edit", "zeroth-release"]
+		end
+  end
+
+  test "`edit <archived-release>` fails", meta do
+		assert_raise ParseError, "the release \"ancient-release\" does not exist", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["edit", "ancient-release"]
 		end
   end
 
@@ -74,7 +80,7 @@ defmodule EetoulCLIParserTest do
 	end
 
   test "`create <new-release> <wrong-branch>` fails", meta do
-		assert_raise ParseError, "the base_branch \"zeroth-branch\" does not exist", fn ->
+		assert_raise ParseError, "the base branch \"zeroth-branch\" does not exist", fn ->
 			CLI.test_cli_argument_parser meta[:repo], ["create", "zeroth-release", "zeroth-branch"]
 		end
   end
@@ -84,6 +90,23 @@ defmodule EetoulCLIParserTest do
 			CLI.test_cli_argument_parser meta[:repo], ["create", "first-release", "first-branch"]
 		end
   end
+
+	test "`unarchive <archived-release>`", meta do
+		assert CLI.test_cli_argument_parser(meta[:repo], ["unarchive", "ancient-release"]) ==
+			%{archived_release: "ancient-release"}
+	end
+
+	test "`unarchive <release>` fails", meta do
+		assert_raise ParseError, "the archived release \"first-release\" does not exist", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["unarchive", "first-release"]
+		end
+	end
+
+	test "`unarchive <new-release>` fails", meta do
+		assert_raise ParseError, "the archived release \"zeroth-release\" does not exist", fn ->
+			CLI.test_cli_argument_parser meta[:repo], ["unarchive", "zeroth-release"]
+		end
+	end
 
 	test "`init`", meta do
 		assert CLI.test_cli_argument_parser(meta[:repo], ["init"]) ==
