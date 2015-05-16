@@ -14,20 +14,27 @@ defmodule Eetoul.CLI do
 
 	@external_resource commands_path = Path.join [__DIR__, "commands"]
 	{:ok, command_file_names} = File.ls commands_path
+	for command_file <- command_file_names do
+		@external_resource Path.join [__DIR__, "commands", command_file]
+	end
+
 	@commands (command_file_names
 						 |> Enum.map(&(String.replace(&1, ".ex", "")))
 						 |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1, (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
 						 |> Enum.map(&(:'Elixir.Eetoul.Commands.#{&1}')))
-
+	
 	defp cli_command(repo, command, options \\ [])
 	for command <- @commands do
 		defp cli_command(repo, [unquote(Macro.escape(command.name)) | args], _options) do
 			spec = unquote(Macro.escape(command.arguments))
-			parse_arguments repo, spec, args
+			args = parse_arguments repo, spec, args
+			unquote(Macro.escape(command.validations))
+			|> Enum.each(&(apply unquote(command), &1, [args]))
+			args
 		end
 	end
 	defp cli_command _repo, [command | _args], _options do
-		raise ParseError, message: "unknown command #{command}"
+		raise ParseError, message: "unknown command \"#{command}\""
 	end
 	defp cli_command _repo, [], _options do
 		raise ParseError, message: "no command specified"

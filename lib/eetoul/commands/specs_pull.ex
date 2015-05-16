@@ -1,4 +1,4 @@
-defmodule Eetoul.Commands.SpecsPush do
+defmodule Eetoul.Commands.SpecsPull do
 	use Eetoul.CommandDSL
 
 	command do

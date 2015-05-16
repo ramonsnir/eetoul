@@ -6,18 +6,24 @@ defmodule Eetoul.CommandDSL do
 
 			import Eetoul.CommandDSL
 
+			@before_compile Eetoul.CommandDSL
+
+			@doc false
 			def name do
-				# in PascalCase
-				command_name = 
-					__MODULE__
-				|> Atom.to_string
-				|> String.split(".")
+				get_module_cli_name __MODULE__
+			end
+
+			@validations []
+		end
+	end
+
+	@doc false
+	defmacro __before_compile__(_env) do
+		quote do
+			@doc false
+			def validations do
+				@validations
 				|> Enum.reverse
-				|> Enum.fetch!(0)
-				# converting PascalCase to lisp-case
-				Regex.replace(~r/([a-z])([A-Z])/, command_name,
-											"\\1-\\2", [global: true])
-				|> String.downcase
 			end
 		end
 	end
@@ -30,11 +36,37 @@ defmodule Eetoul.CommandDSL do
 				unquote block
 				var!(args) |> Enum.reverse
 			end
-
-			def validations do
-				[]
-			end
 		end
+	end
+
+	@doc false
+	defmacro validate error_message, do: block do
+		id = :"__validation_#{:random.uniform(10000)}"
+		quote do
+			def unquote(id)(args) do
+				var!(args) = args
+				unless unquote(block) do
+					raise Eetoul.CLI.ParseError, message: unquote(error_message)
+				end
+			end
+
+			@validations [unquote(id) | @validations]
+		end
+	end
+
+	@doc false
+	def get_module_cli_name module do
+		# in PascalCase
+		command_name = 
+			module
+		|> Atom.to_string
+		|> String.split(".")
+		|> Enum.reverse
+		|> Enum.fetch!(0)
+		# converting PascalCase to lisp-case
+		Regex.replace(~r/([a-z])([A-Z])/, command_name,
+									"\\1-\\2", [global: true])
+		|> String.downcase
 	end
 
 	@doc false
@@ -84,18 +116,6 @@ defmodule Eetoul.CommandDSL do
 											 [{:options, [{unquote(name), :string} | options]} | rest]
 										 rest -> [{:options, [{unquote(name), :string}]} | rest]
 									 end
-		end
-	end
-
-	@doc false
-	defmacro validate error_message, do: block do
-		quote do
-			var!(validations) = [fn opts ->
-														var!(opts) = opts
-														unless unquote(block) do
-															raise ParseError, message: unquote(error_message)
-														end
-													end | var!(validations)]
 		end
 	end
 end
