@@ -69,81 +69,81 @@ defmodule EetoulCLIParserTest do
 		end
   end
 
-	test "`create <new-release> <branch>`", meta do
-		assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-branch"]) ==
-			%{release: "zeroth-release", base_branch: "refs/heads/first-branch"}
-	end
+	# test "`create <new-release> <branch>`", meta do
+	# 	assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-branch"]) ==
+	# 		%{release: "zeroth-release", base_branch: "refs/heads/first-branch"}
+	# end
 
-	test "`create <new-release> <tag>`", meta do
-		assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-tag"]) ==
-			%{release: "zeroth-release", base_branch: "refs/tags/first-tag"}
-	end
+	# test "`create <new-release> <tag>`", meta do
+	# 	assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-tag"]) ==
+	# 		%{release: "zeroth-release", base_branch: "refs/tags/first-tag"}
+	# end
 
-  test "`create <new-release> <wrong-branch>` fails", meta do
-		assert_raise ParseError, "the base branch \"zeroth-branch\" does not exist", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["create", "zeroth-release", "zeroth-branch"]
-		end
-  end
+  # test "`create <new-release> <wrong-branch>` fails", meta do
+	# 	assert_raise ParseError, "the base branch \"zeroth-branch\" does not exist", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["create", "zeroth-release", "zeroth-branch"]
+	# 	end
+  # end
 
-  test "`create <existing-release> <branch>` fails", meta do
-		assert_raise ParseError, "the release \"first-release\" already exists", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["create", "first-release", "first-branch"]
-		end
-  end
+  # test "`create <existing-release> <branch>` fails", meta do
+	# 	assert_raise ParseError, "the release \"first-release\" already exists", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["create", "first-release", "first-branch"]
+	# 	end
+  # end
 
-	test "`unarchive <archived-release>`", meta do
-		assert CLI.test_cli_argument_parser(meta[:repo], ["unarchive", "ancient-release"]) ==
-			%{archived_release: "ancient-release"}
-	end
+	# test "`unarchive <archived-release>`", meta do
+	# 	assert CLI.test_cli_argument_parser(meta[:repo], ["unarchive", "ancient-release"]) ==
+	# 		%{archived_release: "ancient-release"}
+	# end
 
-	test "`unarchive <release>` fails", meta do
-		assert_raise ParseError, "the archived release \"first-release\" does not exist", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["unarchive", "first-release"]
-		end
-	end
+	# test "`unarchive <release>` fails", meta do
+	# 	assert_raise ParseError, "the archived release \"first-release\" does not exist", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["unarchive", "first-release"]
+	# 	end
+	# end
 
-	test "`unarchive <new-release>` fails", meta do
-		assert_raise ParseError, "the archived release \"zeroth-release\" does not exist", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["unarchive", "zeroth-release"]
-		end
-	end
+	# test "`unarchive <new-release>` fails", meta do
+	# 	assert_raise ParseError, "the archived release \"zeroth-release\" does not exist", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["unarchive", "zeroth-release"]
+	# 	end
+	# end
 
-	test "`init`", meta do
-		assert CLI.test_cli_argument_parser(meta[:repo], ["init"]) ==
-			%{}
-	end
+	# test "`init`", meta do
+	# 	assert CLI.test_cli_argument_parser(meta[:repo], ["init"]) ==
+	# 		%{}
+	# end
 
-	test "`specs-push`", meta do
-		assert CLI.test_cli_argument_parser(meta[:repo], ["specs-push"]) ==
-			%{}
-	end
+	# test "`specs-push`", meta do
+	# 	assert CLI.test_cli_argument_parser(meta[:repo], ["specs-push"]) ==
+	# 		%{}
+	# end
 
-	test "`init <release>` fails", meta do
-		assert_raise ParseError, "invalid arguments starting with first-release", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["init", "first-release"]
-		end
-	end
+	# test "`init <release>` fails", meta do
+	# 	assert_raise ParseError, "invalid arguments starting with first-release", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["init", "first-release"]
+	# 	end
+	# end
 
-	test "`add-to <release> <branch> --squash --message \"foo bar\"`", meta do
-		assert CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--message", "foo bar"]) ==
-			%{release: "first-release", branch: "refs/heads/first-branch", squash: true, message: "foo bar"}
-	end
+	# test "`add-to <release> <branch> --squash --message \"foo bar\"`", meta do
+	# 	assert CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--message", "foo bar"]) ==
+	# 		%{release: "first-release", branch: "refs/heads/first-branch", squash: true, message: "foo bar"}
+	# end
 
-	test "`add-to <release> <branch> --squash` fails", meta do
-		assert_raise ParseError, "--message is requires if --squash or --merge are specified", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash"]
-		end
-	end
+	# test "`add-to <release> <branch> --squash` fails", meta do
+	# 	assert_raise ParseError, "--message is requires if --squash or --merge are specified", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash"]
+	# 	end
+	# end
 
-	test "`add-to <release> <branch> --squash --merge` fails", meta do
-		assert_raise ParseError, "--squash and --merge cannot both be specified", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--merge"]
-		end
-	end
+	# test "`add-to <release> <branch> --squash --merge` fails", meta do
+	# 	assert_raise ParseError, "--squash and --merge cannot both be specified", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--merge"]
+	# 	end
+	# end
 
-  test "`noop` fails with ParseError", meta do
-    assert_raise ParseError, "unknown command noop", fn ->
-			CLI.test_cli_argument_parser meta[:repo], ["noop"]
-		end
-  end
+  # test "`noop` fails with ParseError", meta do
+  #   assert_raise ParseError, "unknown command noop", fn ->
+	# 		CLI.test_cli_argument_parser meta[:repo], ["noop"]
+	# 	end
+  # end
 end

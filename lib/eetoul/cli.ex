@@ -5,7 +5,6 @@ end
 defmodule Eetoul.CLI do
 	use Geef
 	require Monad.Error, as: Error
-	use Eetoul.CLIDSL
 	alias Eetoul.CLI.ParseError
 
 	@doc false
@@ -13,75 +12,26 @@ defmodule Eetoul.CLI do
 		cli_command repo, argv, dryrun: true
 	end
 
-	command :init, do: ()
+	@external_resource commands_path = Path.join [__DIR__, "commands"]
+	{:ok, command_file_names} = File.ls commands_path
+	@commands (command_file_names
+						 |> Enum.map(&(String.replace(&1, ".ex", "")))
+						 |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1, (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
+						 |> Enum.map(&(:'Elixir.Eetoul.Commands.#{&1}')))
 
-	command :specs_push do
-		flag :force
-	end
-
-	command :specs_pull do
-		flag :force
-	end
-
-	command :create do
-		new_release :release
-		reference :base_branch
-	end
-
-	command :make do
-		release :release
-	end
-
-	command :test do
-		release :release
-	end
-
-	command :push do
-		release :release
-		flag :force
-	end
-
-	command :add_to do
-		release :release
-		reference :branch
-		flag :squash
-		flag :merge
-		string :message
-		validate "--squash and --merge cannot both be specified" do
-			!(opts[:squash] && opts[:merge])
-		end
-		validate "--message is requires if --squash or --merge are specified" do
-			!((opts[:squash] || opts[:merge]) && !opts[:message])
+	defp cli_command(repo, command, options \\ [])
+	for command <- @commands do
+		defp cli_command(repo, [unquote(Macro.escape(command.name)) | args], _options) do
+			spec = unquote(Macro.escape(command.arguments))
+			parse_arguments repo, spec, args
 		end
 	end
-
-	command :cat do
-		release :release
-		flag :color
+	defp cli_command _repo, [command | _args], _options do
+		raise ParseError, message: "unknown command #{command}"
 	end
-	
-	command :edit do
-		release :release
-		flag :amend
+	defp cli_command _repo, [], _options do
+		raise ParseError, message: "no command specified"
 	end
-
-	command :archive do
-		release :release
-		flag :force
-		string :as
-	end
-
-	command :unarchive do
-		archived_release :archived_release
-		flag :force
-	end
-
-	command :acat do
-		archived_release :archived_release
-		flag :color
-	end
-
-	command :help, do: ()
 
 	defp prettify_name name do
 		name
