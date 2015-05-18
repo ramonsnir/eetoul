@@ -23,20 +23,24 @@ defmodule Eetoul.CLI do
 						 |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1, (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
 						 |> Enum.map(&(:'Elixir.Eetoul.Commands.#{&1}')))
 	
-	defp cli_command(repo, command, options \\ [])
+	def cli_command(repo, command, options \\ [])
 	for command <- @commands do
-		defp cli_command(repo, [unquote(Macro.escape(command.name)) | args], _options) do
+		def cli_command(repo, [unquote(Macro.escape(command.name)) | args], options) do
 			spec = unquote(Macro.escape(command.arguments))
 			args = parse_arguments repo, spec, args
 			unquote(Macro.escape(command.validations))
 			|> Enum.each(&(apply unquote(command), &1, [args]))
-			args
+			if options[:dryrun] do
+				args
+			else
+				unquote(command).run args
+			end
 		end
 	end
-	defp cli_command _repo, [command | _args], _options do
+	def cli_command _repo, [command | _args], _options do
 		raise ParseError, message: "unknown command \"#{command}\""
 	end
-	defp cli_command _repo, [], _options do
+	def cli_command _repo, [], _options do
 		raise ParseError, message: "no command specified"
 	end
 
@@ -99,11 +103,6 @@ defmodule Eetoul.CLI do
 	defp parse_arguments(_repo, [], []), do: %{}
 	defp parse_arguments _repo, [], [arg | _args] do
 		raise ParseError, message: "invalid arguments starting with #{arg}"
-	end
-
-	defp run_command repo, name, data do
-		# TODO implement
-		IO.inspect {repo, name, data}
 	end
 
 	def read_spec repo, spec do

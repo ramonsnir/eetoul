@@ -8,9 +8,13 @@ defmodule Eetoul.Command do
 		{:string, String.t}
 	)
 
-	@type validation :: {String.t, (Dict.t -> any)}
+	@type spec :: any
+
+	@type validation :: (spec -> any)
 
 	defcallback arguments() :: [argument]
 
 	defcallback validations() :: [validation]
+
+	#defcallback run(spec) :: boolean
 end
