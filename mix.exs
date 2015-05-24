@@ -12,7 +12,7 @@ defmodule Eetoul.Mixfile do
 	end
 
 	def application do
-		[applications: [:logger]]
+		[applications: []]
 	end
 
 	defp escript do
@@ -22,7 +22,7 @@ defmodule Eetoul.Mixfile do
 
 	defp dialyzer do
 		paths = ["eetoul", "geef", "monad"]
-		|> Enum.map(&(File.cwd!() <> "/_build/dev/lib/" <> &1 <> "/ebin"))
+		|> Enum.map(&(File.cwd!() <> "/_build/#{Mix.env}/lib/" <> &1 <> "/ebin"))
 
 		[plt_apps: [:erts, :kernel, :stdlib, :mnesia],
 		 flags: ["-Wunmatched_returns","-Werror_handling","-Wrace_conditions", "-Wno_opaque"],

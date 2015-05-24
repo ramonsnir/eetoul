@@ -1,5 +1,7 @@
 defmodule Eetoul do
+	import Eetoul.CLIUtils
+
 	def main _args do
-		IO.puts "empty"
+		print "empty", :green
 	end
 end
