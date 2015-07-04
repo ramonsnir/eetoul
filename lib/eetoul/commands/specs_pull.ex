@@ -1,7 +1,7 @@
 defmodule Eetoul.Commands.SpecsPull do
-	use Eetoul.CommandDSL
+  use Eetoul.CommandDSL
 
-	command do
-		flag :force
-	end
+  command do
+    flag :force
+  end
 end

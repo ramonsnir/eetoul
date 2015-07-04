@@ -1,5 +1,5 @@
 defmodule Eetoul.Commands.Init do
-	use Eetoul.CommandDSL
+  use Eetoul.CommandDSL
 
-	command do: ()
+  command do: ()
 end

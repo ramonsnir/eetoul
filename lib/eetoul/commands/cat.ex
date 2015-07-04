@@ -1,8 +1,8 @@
 defmodule Eetoul.Commands.Cat do
-	use Eetoul.CommandDSL
+  use Eetoul.CommandDSL
 
-	command do
-		release :release
-		flag :color
-	end
+  command do
+    release :release
+    flag :color
+  end
 end
