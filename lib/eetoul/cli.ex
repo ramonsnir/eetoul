@@ -22,7 +22,8 @@ defmodule Eetoul.CLI do
              |> Enum.map(&(String.replace(&1, ".ex", "")))
              |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1, (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
              |> Enum.map(&(:'Elixir.Eetoul.Commands.#{&1}')))
-  
+
+  @doc false
   def cli_command(repo, command, options \\ [])
   for command <- @commands do
     def cli_command(repo, [unquote(Macro.escape(command.name)) | args], options) do
@@ -33,7 +34,7 @@ defmodule Eetoul.CLI do
       if options[:dryrun] do
         args
       else
-        unquote(command).run args
+        unquote(command).run repo, args
       end
     end
   end
@@ -105,7 +106,7 @@ defmodule Eetoul.CLI do
     raise ParseError, message: "invalid arguments starting with #{arg}"
   end
 
-  def read_spec repo, spec do
+  defp read_spec repo, spec do
     RepoUtils.read_file repo, "refs/heads/eetoul-spec", spec
   end
 end

@@ -7,7 +7,7 @@ defmodule EetoulCLIParserTest do
   setup_all do
     {a, b, c} = :erlang.timestamp
     :random.seed a, b, c
-    path = "tmp-#{:random.uniform 1000000}"
+    path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
     File.rm_rf path
     on_exit fn -> File.rm_rf path end
     case SampleSpecRepo.create path do
@@ -15,13 +15,6 @@ defmodule EetoulCLIParserTest do
         {:ok, repo: repo}
       e -> e
     end
-  end
-
-  test "read_spec utility method", meta do
-    assert CLI.read_spec(meta[:repo], "first-release") ==
-      {:ok, ""}
-    assert CLI.read_spec(meta[:repo], "first-branch") ==
-      {:error, "The path 'first-branch' does not exist in the given tree"}
   end
   
   test "`edit <release>`", meta do

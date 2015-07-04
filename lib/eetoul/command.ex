@@ -10,6 +10,8 @@ defmodule Eetoul.Command do
 
   @type parsed_arguments :: %{}
 
+  @type repo :: pid
+
   @type validation :: (parsed_arguments -> any)
 
   defcallback arguments() :: [argument]
@@ -21,5 +23,5 @@ defmodule Eetoul.Command do
     {:error, any}
   )
 
-  defcallback run(parsed_arguments) :: command_result
+  defcallback run(repo, parsed_arguments) :: command_result
 end

@@ -8,8 +8,8 @@ defmodule Eetoul.Test.SampleSpecRepo do
     {:ok, repo} = Repository.init path, true
 
     {:ok, commit} = make_commit(repo, "Eetoul Spec",
-                                %{"first-release" => "",
-                                  "second-release" => "",
+                                %{"first-release" => "checkout first-branch\ntake first-branch\n",
+                                  "second-release" => "checkout first-release",
                                   ".archive/ancient-release" => ""})
     {:ok, _ref} = Reference.create repo, "refs/heads/eetoul-spec", commit
 
