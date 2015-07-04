@@ -1,4 +1,4 @@
-defmodule Eetoul.Test.RepoUtils do
+defmodule Eetoul.RepoUtils do
 	use Geef
   alias Geef.Index
   alias Geef.Index.Entry

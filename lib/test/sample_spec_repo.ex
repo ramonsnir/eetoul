@@ -1,6 +1,6 @@
 defmodule Eetoul.Test.SampleSpecRepo do
 	use Geef
-	import Eetoul.Test.RepoUtils
+	import Eetoul.RepoUtils
 
 	@doc false
 	def create path do
