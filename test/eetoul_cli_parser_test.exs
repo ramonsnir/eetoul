@@ -5,7 +5,7 @@ defmodule EetoulCLIParserTest do
 	alias Eetoul.Test.SampleSpecRepo
 
 	setup_all do
-		{a, b, c} = :erlang.now
+		{a, b, c} = :erlang.timestamp
 		:random.seed a, b, c
 		path = "tmp-#{:random.uniform 1000000}"
 		File.rm_rf path
