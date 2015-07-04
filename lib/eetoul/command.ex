@@ -8,7 +8,7 @@ defmodule Eetoul.Command do
 		{:string, String.t}
 	)
 
-	@type parsed_arguments :: any
+	@type parsed_arguments :: %{}
 
 	@type validation :: (parsed_arguments -> any)
 
@@ -17,8 +17,7 @@ defmodule Eetoul.Command do
 	defcallback validations() :: [validation]
 
 	@type command_result :: (
-		:ok |
-		:failure |
+		{:ok, nil} |
 		{:error, any}
 	)
 

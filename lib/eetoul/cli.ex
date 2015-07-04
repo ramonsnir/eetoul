@@ -4,8 +4,8 @@ end
 
 defmodule Eetoul.CLI do
 	use Geef
-	require Monad.Error, as: Error
 	alias Eetoul.CLI.ParseError
+	alias Eetoul.RepoUtils
 
 	@doc false
 	def test_cli_argument_parser repo, argv do
@@ -106,14 +106,6 @@ defmodule Eetoul.CLI do
 	end
 
 	def read_spec repo, spec do
-		Error.m do
-			%Reference{target: commit_id} <- Reference.lookup(repo, "refs/heads/eetoul-spec")
-			commit <- Commit.lookup(repo, commit_id)
-			tree <- Commit.tree(commit)
-			%TreeEntry{id: file_id} <- Tree.get(tree, spec)
-			blob <- Blob.lookup(repo, file_id)
-			content <- Blob.content(blob)
-			return content
-		end
+		RepoUtils.read_file repo, "refs/heads/eetoul-spec", spec
 	end
 end

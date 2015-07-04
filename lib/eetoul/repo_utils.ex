@@ -1,5 +1,6 @@
 defmodule Eetoul.RepoUtils do
 	use Geef
+	require Monad.Error, as: Error
   alias Geef.Index
   alias Geef.Index.Entry
 
@@ -33,5 +34,18 @@ defmodule Eetoul.RepoUtils do
 		end
 		{:ok, tree_id} = Index.write_tree idx, repo
 		Commit.create repo, sig, sig, message, tree_id, parents
+	end
+
+	@doc false
+	def read_file repo, reference, path do
+		Error.m do
+			%Reference{target: commit_id} <- Reference.dwim(repo, reference)
+			commit <- Commit.lookup(repo, commit_id)
+			tree <- Commit.tree(commit)
+			%TreeEntry{id: file_id} <- Tree.get(tree, path)
+			blob <- Blob.lookup(repo, file_id)
+			content <- Blob.content(blob)
+			return content
+		end
 	end
 end
