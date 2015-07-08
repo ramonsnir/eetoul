@@ -12,6 +12,15 @@ defmodule Eetoul.CLI do
     cli_command repo, argv, dryrun: true
   end
 
+  @doc false
+  def run_command repo, argv do
+    try do
+      cli_command repo, argv
+    rescue
+      e in ParseError -> IO.puts :stderr, e.message
+    end
+  end
+
   @external_resource commands_path = Path.join [__DIR__, "commands"]
   {:ok, command_file_names} = File.ls commands_path
   for command_file <- command_file_names do
@@ -23,10 +32,9 @@ defmodule Eetoul.CLI do
              |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1, (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
              |> Enum.map(&(:'Elixir.Eetoul.Commands.#{&1}')))
 
-  @doc false
-  def cli_command(repo, command, options \\ [])
+  defp cli_command(repo, command, options \\ [])
   for command <- @commands do
-    def cli_command(repo, [unquote(Macro.escape(command.name)) | args], options) do
+    defp cli_command(repo, [unquote(Macro.escape(command.name)) | args], options) do
       spec = unquote(Macro.escape(command.arguments))
       args = parse_arguments repo, spec, args
       unquote(Macro.escape(command.validations))
@@ -38,10 +46,10 @@ defmodule Eetoul.CLI do
       end
     end
   end
-  def cli_command _repo, [command | _args], _options do
+  defp cli_command _repo, [command | _args], _options do
     raise ParseError, message: "Unknown command \"#{command}\"."
   end
-  def cli_command _repo, [], _options do
+  defp cli_command _repo, [], _options do
     raise ParseError, message: "No command specified."
   end
 

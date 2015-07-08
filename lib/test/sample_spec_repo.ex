@@ -9,8 +9,8 @@ defmodule Eetoul.Test.SampleSpecRepo do
 
     {:ok, commit} = make_commit(repo, "Eetoul Spec",
                                 %{"first-release" => "checkout first-branch\ntake first-branch\n",
-                                  "second-release" => "checkout first-release",
-                                  ".archive/ancient-release" => ""})
+                                  "second-release" => "checkout first-release\n",
+                                  ".archive/ancient-release" => "checkout no-commit\n"})
     {:ok, _ref} = Reference.create repo, "refs/heads/eetoul-spec", commit
 
     {:ok, commit} = make_commit(repo, "Code Branch 1",
