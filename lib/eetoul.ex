@@ -1,7 +1,13 @@
 defmodule Eetoul do
-  import Eetoul.CLIUtils
+  use Geef
+  alias Eetoul.CLI
 
-  def main _args do
-    print "empty", :green
+  def main args do
+    path = System.get_env("EETOUL_CWD")
+    if path == nil do
+      {:ok, path} = File.cwd
+    end
+    {:ok, repo} = Repository.open path
+    CLI.run_command repo, args, interactive: (System.get_env("EETOUL_INTERACTIVE") == "1")
   end
 end

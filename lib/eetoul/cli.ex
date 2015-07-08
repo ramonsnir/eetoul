@@ -13,11 +13,16 @@ defmodule Eetoul.CLI do
   end
 
   @doc false
-  def run_command repo, argv do
+  def run_command repo, argv, opts \\ %{} do
     try do
       cli_command repo, argv
     rescue
-      e in ParseError -> IO.puts :stderr, e.message
+      e in ParseError ->
+        if opts[:interactive] do
+          IO.puts :stderr, Colorful.string(e.message, :red)
+        else
+          IO.puts :stderr, e.message
+        end
     end
   end
 

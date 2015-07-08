@@ -1,3 +1,3 @@
 use Mix.Config
 
-config :eetoul, :output_colors, true
+#config :eetoul, :output_colors, true

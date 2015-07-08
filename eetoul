@@ -1,0 +1,11 @@
+#!/bin/bash
+
+EETOUL_INTERACTIVE="0"
+if [ -t 1 ]; then
+  EETOUL_INTERACTIVE="1"
+fi
+export EETOUL_INTERACTIVE
+
+export EETOUL_CWD="$(pwd)"
+cd /opt/eetoul/deps/geef
+/opt/eetoul/bin/eetoul $@
