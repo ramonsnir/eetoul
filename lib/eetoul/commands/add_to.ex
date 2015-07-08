@@ -9,11 +9,11 @@ defmodule Eetoul.Commands.AddTo do
     string :message
   end
 
-  validate "--squash and --merge cannot both be specified" do
+  validate "Arguments --squash and --merge cannot both be specified." do
     !(args[:squash] && args[:merge])
   end
   
-  validate "--message is requires if --squash or --merge are specified" do
+  validate "Argument --message is requires if --squash or --merge are specified." do
     !((args[:squash] || args[:merge]) && !args[:message])
   end
 end

@@ -17,7 +17,7 @@ defmodule EetoulCReadOnlyCommandsTest do
     end
   end
 
-  test "cat first-release prints release spec", meta do
+  test "`cat first-release` prints release spec", meta do
     call = fn ->
       CLI.cli_command meta[:repo], ["cat", "first-release"]
     end

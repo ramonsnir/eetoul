@@ -1,5 +1,5 @@
 defmodule Eetoul.CLI.ParseError do
-  defexception message: "invalid arguments"
+  defexception message: "Invalid arguments."
 end
 
 defmodule Eetoul.CLI do
@@ -39,10 +39,10 @@ defmodule Eetoul.CLI do
     end
   end
   def cli_command _repo, [command | _args], _options do
-    raise ParseError, message: "unknown command \"#{command}\""
+    raise ParseError, message: "Unknown command \"#{command}\"."
   end
   def cli_command _repo, [], _options do
-    raise ParseError, message: "no command specified"
+    raise ParseError, message: "No command specified."
   end
 
   defp prettify_name name do
@@ -56,7 +56,7 @@ defmodule Eetoul.CLI do
       {:ok, _} ->
         parse_arguments(repo, specs, args)
         |> Dict.put(name, value)
-      _ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" does not exist"
+      _ -> raise ParseError, message: "The #{prettify_name name} \"#{value}\" does not exist."
     end
   end
   defp parse_arguments repo, [{:release, name, :new} | specs], [value | args] do
@@ -64,7 +64,7 @@ defmodule Eetoul.CLI do
       {:error, _} ->
         parse_arguments(repo, specs, args)
         |> Dict.put(name, value)
-      _ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" already exists"
+      _ -> raise ParseError, message: "The #{prettify_name name} \"#{value}\" already exists."
     end
   end
   defp parse_arguments repo, [{:release, name, :archived} | specs], [value | args] do
@@ -72,11 +72,11 @@ defmodule Eetoul.CLI do
       {:ok, _} ->
         parse_arguments(repo, specs, args)
         |> Dict.put(name, value)
-      _ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" does not exist"
+      _ -> raise ParseError, message: "The #{prettify_name name} \"#{value}\" does not exist."
     end
   end
   defp parse_arguments _repo, [{:release, name, _} | _], [] do
-    raise ParseError, message: "no #{prettify_name name} was specified"
+    raise ParseError, message: "No #{prettify_name name} was specified."
   end
 
   defp parse_arguments repo, [{:reference, name} | specs], [value | args] do
@@ -84,11 +84,11 @@ defmodule Eetoul.CLI do
       {:ok, %Reference{name: real_name}} ->
         parse_arguments(repo, specs, args)
         |> Dict.put(name, real_name)
-      _ -> raise ParseError, message: "the #{prettify_name name} \"#{value}\" does not exist"
+      _ -> raise ParseError, message: "The #{prettify_name name} \"#{value}\" does not exist."
     end
   end
   defp parse_arguments _repo, [{:reference, name} | _], [] do
-    raise ParseError, message: "no #{prettify_name name} was specified"
+    raise ParseError, message: "No #{prettify_name name} was specified."
   end
 
   defp parse_arguments repo, [{:options, spec} | []], args do
@@ -98,12 +98,12 @@ defmodule Eetoul.CLI do
     end
   end
   defp parse_arguments _repo, [{:options, _spec} | _], _args do
-    raise ParseError, message: ":options must be the last arguments specification"
+    raise ParseError, message: ":options must be the last arguments specification."
   end
 
   defp parse_arguments(_repo, [], []), do: %{}
   defp parse_arguments _repo, [], [arg | _args] do
-    raise ParseError, message: "invalid arguments starting with #{arg}"
+    raise ParseError, message: "Invalid arguments starting with #{arg}."
   end
 
   defp read_spec repo, spec do
