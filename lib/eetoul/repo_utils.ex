@@ -37,20 +37,25 @@ defmodule Eetoul.RepoUtils do
   end
 
   @doc false
-  def read_file repo, (commit = %Object{type: :commit}), path do
+  def read_file repo, reference, path do
     Error.m do
-      tree <- Commit.tree(commit)
-      %TreeEntry{id: file_id} <- Tree.get(tree, path)
-      blob <- Blob.lookup(repo, file_id)
-      content <- Blob.content(blob)
+      commit <- resolve_reference repo, reference
+      tree <- Commit.tree commit
+      %TreeEntry{id: file_id} <- Tree.get tree, path
+      blob <- Blob.lookup repo, file_id
+      content <- Blob.content blob
       return content
     end
   end
-  def read_file repo, reference, path do
+
+  defp resolve_reference _repo, (commit = %Object{type: :commit}) do
+    {:ok, commit}
+  end
+  defp resolve_reference repo, reference do
     Error.m do
       %Reference{target: commit_id} <- Reference.dwim(repo, reference)
       commit <- Commit.lookup(repo, commit_id)
-      read_file repo, commit, path
+      return commit
     end
   end
 end
