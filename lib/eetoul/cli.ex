@@ -18,7 +18,7 @@ defmodule Eetoul.CLI do
       cli_command repo, argv
     rescue
       e in ParseError ->
-        if opts[:interactive] do
+        if Application.get_env(:eetoul, :interactive) do
           IO.puts :stderr, Colorful.string(e.message, :red)
         else
           IO.puts :stderr, e.message
