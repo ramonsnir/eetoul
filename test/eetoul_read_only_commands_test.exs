@@ -1,4 +1,4 @@
-defmodule EetoulCReadOnlyCommandsTest do
+defmodule EetoulReadOnlyCommandsTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
   alias Eetoul.CLI
