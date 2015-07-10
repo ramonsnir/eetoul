@@ -1,5 +1,5 @@
 defmodule EetoulCLIParserTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Eetoul.CLI
   alias Eetoul.CLI.ParseError
   alias Eetoul.Test.SampleSpecRepo
