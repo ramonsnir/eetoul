@@ -5,6 +5,7 @@ end
 defmodule Eetoul.CLI do
   use Geef
   alias Eetoul.CLI.ParseError
+  alias Eetoul.Colorful
   alias Eetoul.RepoUtils
 
   @doc false
@@ -13,16 +14,12 @@ defmodule Eetoul.CLI do
   end
 
   @doc false
-  def run_command repo, argv, opts \\ %{} do
+  def run_command repo, argv do
     try do
       cli_command repo, argv
     rescue
       e in ParseError ->
-        if Application.get_env(:eetoul, :interactive) do
-          IO.puts :stderr, Colorful.string(e.message, :red)
-        else
-          IO.puts :stderr, e.message
-        end
+        IO.puts :stderr, Colorful.string(e.message, :red)
     end
   end
 
