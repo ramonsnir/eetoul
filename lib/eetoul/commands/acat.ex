@@ -13,7 +13,7 @@ defmodule Eetoul.Commands.Acat do
   def run repo, args do
     Error.m do
       spec <- RepoUtils.read_file(repo, "refs/heads/eetoul-spec", ".archive/#{args[:archived_release]}")
-      _ <- {IO.puts(String.strip(spec)), nil}
+      _ok <- {IO.write(spec), nil}
       return nil
     end
   end

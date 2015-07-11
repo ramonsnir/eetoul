@@ -1,5 +1,5 @@
 defmodule Eetoul.CommandDSL do
-  @doc false
+  @doc ""
   defmacro __using__ _opts do
     quote do
       @behaviour Eetoul.Command
@@ -8,7 +8,7 @@ defmodule Eetoul.CommandDSL do
 
       @before_compile Eetoul.CommandDSL
 
-      @doc false
+      @doc ""
       def name do
         get_module_cli_name __MODULE__
       end
@@ -17,10 +17,10 @@ defmodule Eetoul.CommandDSL do
     end
   end
 
-  @doc false
+  @doc ""
   defmacro __before_compile__(_env) do
     quote do
-      @doc false
+      @doc ""
       def validations do
         @validations
         |> Enum.reverse
@@ -28,7 +28,7 @@ defmodule Eetoul.CommandDSL do
     end
   end
 
-  @doc false
+  @doc ""
   defmacro command do: block do
     quote do
       def arguments do
@@ -39,7 +39,7 @@ defmodule Eetoul.CommandDSL do
     end
   end
 
-  @doc false
+  @doc ""
   defmacro validate error_message, do: block do
     id = :"__validation_#{:random.uniform(10000)}"
     quote do
@@ -54,7 +54,7 @@ defmodule Eetoul.CommandDSL do
     end
   end
 
-  @doc false
+  @doc ""
   def get_module_cli_name module do
     # in PascalCase
     command_name = 
@@ -69,35 +69,35 @@ defmodule Eetoul.CommandDSL do
     |> String.downcase
   end
 
-  @doc false
+  @doc ""
   defmacro release name do
     quote do
       var!(args) = [{:release, unquote(name), :existing} | var!(args)]
     end
   end
 
-  @doc false
+  @doc ""
   defmacro new_release name do
     quote do
       var!(args) = [{:release, unquote(name), :new} | var!(args)]
     end
   end
 
-  @doc false
+  @doc ""
   defmacro archived_release name do
     quote do
       var!(args) = [{:release, unquote(name), :archived} | var!(args)]
     end
   end
 
-  @doc false
+  @doc ""
   defmacro reference name do
     quote do
       var!(args) = [{:reference, unquote(name)} | var!(args)]
     end
   end
 
-  @doc false
+  @doc ""
   defmacro flag name do
     quote do
       var!(args) = case var!(args) do
@@ -108,7 +108,7 @@ defmodule Eetoul.CommandDSL do
     end
   end
 
-  @doc false
+  @doc ""
   defmacro string name do
     quote do
       var!(args) = case var!(args) do

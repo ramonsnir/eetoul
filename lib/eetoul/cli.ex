@@ -8,12 +8,12 @@ defmodule Eetoul.CLI do
   alias Eetoul.Colorful
   alias Eetoul.RepoUtils
 
-  @doc false
+  @doc ""
   def test_cli_argument_parser repo, argv do
     cli_command repo, argv, dryrun: true
   end
 
-  @doc false
+  @doc ""
   def run_command repo, argv do
     try do
       cli_command repo, argv

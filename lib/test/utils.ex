@@ -1,7 +1,7 @@
 defmodule Eetoul.Test.Utils do
   import ExUnit.CaptureIO
 
-  @doc false
+  @doc ""
   def capture_io fun do
     {:ok, result} = Agent.start_link fn -> %{} end
     save = fn name, value ->

@@ -20,7 +20,7 @@ defmodule Eetoul.Test.SampleTreeRepo do
   use Geef
   import Eetoul.RepoUtils
 
-  @doc false
+  @doc ""
   def create path do
     :ok = File.mkdir path
     {:ok, repo} = Repository.init path, true

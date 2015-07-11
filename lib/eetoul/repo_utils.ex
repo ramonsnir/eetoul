@@ -4,7 +4,7 @@ defmodule Eetoul.RepoUtils do
   alias Geef.Index
   alias Geef.Index.Entry
 
-  @doc false
+  @doc ""
   def make_commit repo, message, files, parents \\ [], sig \\ nil do
     unless sig do
       sig = Signature.now "Eetoul Test", "test@eetoul"
@@ -13,7 +13,7 @@ defmodule Eetoul.RepoUtils do
     Commit.create repo, sig, sig, message, tree_id, parents
   end
 
-  @doc false
+  @doc ""
   def read_file repo, reference, path do
     Error.m do
       commit <- resolve_reference repo, reference
@@ -25,7 +25,7 @@ defmodule Eetoul.RepoUtils do
     end
   end
 
-  @doc false
+  @doc ""
   def commit repo, reference, message, sig \\ nil, transformation do
     unless sig do
       sig = Signature.now "Eetoul", "eetoul@eetoul"
