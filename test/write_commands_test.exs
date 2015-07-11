@@ -55,4 +55,39 @@ defmodule EetoulWriteCommandsTest do
     end
     assert capture_io(call) == %{value: {:ok, nil}, stdout: "checkout first\ntake second\ntake-squash third Third tag is here\ntake-merge fourth\n", stderr: ""}
   end
+
+  test "`init`, `create` and `archive` and `unarchive`", meta do
+    call = fn ->
+      CLI.run_command meta[:repo], ["init"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "Initialized the Eetoul spec branch.\n", stderr: ""}
+    call = fn ->
+      CLI.run_command meta[:repo], ["create", "first-release", "first"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "Created release \"first-release\" based on \"first\".\n", stderr: ""}
+    call = fn ->
+      CLI.run_command meta[:repo], ["archive", "first-release"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "Archived release \"first-release\".\n", stderr: ""}
+    call = fn ->
+      CLI.run_command meta[:repo], ["acat", "first-release"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "checkout first\n", stderr: ""}
+    call = fn ->
+      CLI.run_command meta[:repo], ["cat", "first-release"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "", stderr: "The release \"first-release\" does not exist.\n"}
+    call = fn ->
+      CLI.run_command meta[:repo], ["unarchive", "first-release"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "Unarchived release \"first-release\".\n", stderr: ""}
+    call = fn ->
+      CLI.run_command meta[:repo], ["cat", "first-release"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "checkout first\n", stderr: ""}
+    call = fn ->
+      CLI.run_command meta[:repo], ["acat", "first-release"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: "", stderr: "The archived release \"first-release\" does not exist.\n"}
+  end
 end
