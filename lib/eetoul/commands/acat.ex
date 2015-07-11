@@ -1,6 +1,7 @@
 defmodule Eetoul.Commands.Acat do
   use Eetoul.CommandDSL
   require Monad.Error, as: Error
+  alias Eetoul.Format
   alias Eetoul.RepoUtils
 
   def description, do: "prints the Eetoul spec (for an archived spec)"
@@ -13,7 +14,7 @@ defmodule Eetoul.Commands.Acat do
   def run repo, args do
     Error.m do
       spec <- RepoUtils.read_file(repo, "refs/heads/eetoul-spec", ".archive/#{args[:archived_release]}")
-      _ok <- {IO.write(spec), nil}
+      _ok <- {:ok, Format.pretty_print(spec)}
       return nil
     end
   end
