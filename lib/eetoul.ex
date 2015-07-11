@@ -8,7 +8,14 @@ defmodule Eetoul do
     if path == nil do
       {:ok, path} = File.cwd
     end
-    {:ok, repo} = Repository.open path
-    CLI.run_command repo, args
+    case args do
+      ["--help"] -> CLI.run_command self, ["help"]
+      ["help"] -> CLI.run_command self, ["help"]
+      _ ->
+        case Repository.open path do
+          {:ok, repo} -> CLI.run_command repo, args
+          {:error, message} -> IO.puts :stderr, Colorful.string(message, :red)
+        end
+    end
   end
 end

@@ -14,6 +14,10 @@ defmodule Eetoul.Command do
 
   @type validation :: (parsed_arguments -> any)
 
+  defcallback name() :: String.t
+
+  defcallback description() :: String.t
+
   defcallback arguments() :: [argument]
 
   defcallback validations() :: [validation]
