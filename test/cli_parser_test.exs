@@ -118,8 +118,14 @@ defmodule EetoulCLIParserTest do
   end
 
   test "`add-to <release> <branch> --squash` fails", meta do
-    assert_raise ParseError, "Argument --message is requires if --squash or --merge are specified.", fn ->
+    assert_raise ParseError, "Argument --message is required if --squash is specified.", fn ->
       CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash"]
+    end
+  end
+
+  test "`add-to <release> <branch> --message` fails", meta do
+    assert_raise ParseError, "Argument --message is only allowed if --squash is specified.", fn ->
+      CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--message", "first-branch"]
     end
   end
 

@@ -12,8 +12,12 @@ defmodule Eetoul.Commands.AddTo do
   validate "Arguments --squash and --merge cannot both be specified." do
     !(args[:squash] && args[:merge])
   end
-  
-  validate "Argument --message is requires if --squash or --merge are specified." do
-    !((args[:squash] || args[:merge]) && !args[:message])
+
+  validate "Argument --message is required if --squash is specified." do
+    !(args[:squash] && !args[:message])
+  end
+
+  validate "Argument --message is only allowed if --squash is specified." do
+    !(!args[:squash] && args[:message])
   end
 end
