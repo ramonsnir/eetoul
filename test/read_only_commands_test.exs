@@ -1,5 +1,5 @@
 defmodule EetoulReadOnlyCommandsTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   import ExUnit.CaptureIO
   alias Eetoul.CLI
   alias Eetoul.Test.SampleSpecRepo
