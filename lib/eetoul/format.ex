@@ -4,7 +4,7 @@ defmodule Eetoul.Format do
   @doc ""
   def pretty_print device \\ :stdio, spec do
     spec
-    |> String.split(["\r", "\n"], trim: true)
+    |> String.split(["\n", "\r"], trim: true)
     |> Enum.map(&(String.split(&1, "#")))
     |> Enum.map(&(if Enum.count(&1) == 1, do: [Enum.at(&1, 0), nil], else: &1))
     |> Enum.each(fn [code, comment] ->
