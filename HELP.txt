@@ -11,7 +11,7 @@ Available commands:
   init                                                                       	initialized the Eetoul spec branch
   make <release>                                                             	makes the Eetoul integration branch
   push <release> [--force]                                                   	makes and pushes the Eetoul integration branch
-  specs-pull [--force]                                                       	pulls the latest Eetoul spec branch from its default remote
-  specs-push [--force]                                                       	pushes the Eetoul spec branch to its default remote
+  specs-pull [--force] [--remote <value>]                                    	pulls the latest Eetoul spec branch from its default remote
+  specs-push [--force] [--remote <value>]                                    	pushes the Eetoul spec branch to its default remote
   test <release>                                                             	tests that the Eetoul integration branch can be made
   unarchive <release> [--force]                                              	unarchives the Eetoul spec
