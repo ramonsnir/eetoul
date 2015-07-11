@@ -59,12 +59,12 @@ defmodule EetoulCLIParserTest do
 
   test "`create <new-release> <branch>`", meta do
     assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-branch"]) ==
-      %{release: "zeroth-release", base_branch: "refs/heads/first-branch"}
+      %{release: "zeroth-release", base_branch: "first-branch"}
   end
 
   test "`create <new-release> <tag>`", meta do
     assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-tag"]) ==
-      %{release: "zeroth-release", base_branch: "refs/tags/first-tag"}
+      %{release: "zeroth-release", base_branch: "first-tag"}
   end
 
   test "`create <new-release> <wrong-branch>` fails", meta do
@@ -114,7 +114,7 @@ defmodule EetoulCLIParserTest do
 
   test "`add-to <release> <branch> --squash --message \"foo bar\"`", meta do
     assert CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--message", "foo bar"]) ==
-      %{release: "first-release", branch: "refs/heads/first-branch", squash: true, message: "foo bar"}
+      %{release: "first-release", branch: "first-branch", squash: true, message: "foo bar"}
   end
 
   test "`add-to <release> <branch> --squash` fails", meta do

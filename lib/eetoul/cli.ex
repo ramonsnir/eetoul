@@ -19,7 +19,7 @@ defmodule Eetoul.CLI do
       cli_command repo, argv
     rescue
       e in ParseError ->
-        IO.puts :stderr, Colorful.string(e.message, :red)
+        {IO.puts(:stderr, Colorful.string(e.message, :red)), nil}
     end
   end
 
@@ -92,8 +92,9 @@ defmodule Eetoul.CLI do
   defp parse_arguments repo, [{:reference, name} | specs], [value | args] do
     case Reference.dwim repo, value do
       {:ok, %Reference{name: real_name}} ->
+        value = String.split(real_name, "/") |> Enum.reverse |> Enum.at(0)
         parse_arguments(repo, specs, args)
-        |> Dict.put(name, real_name)
+        |> Dict.put(name, value)
       _ -> raise ParseError, message: "The #{prettify_name name} \"#{value}\" does not exist."
     end
   end

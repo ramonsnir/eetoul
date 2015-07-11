@@ -25,6 +25,47 @@ defmodule Eetoul.RepoUtils do
     end
   end
 
+  @doc false
+  def commit repo, reference, message, sig \\ nil, transformation do
+    unless sig do
+      sig = Signature.now "Eetoul", "eetoul@eetoul"
+    end
+    maybe_resolved_parent = resolve_reference repo, reference
+    case maybe_resolved_parent do
+      {:ok, _} ->
+        maybe_files = Error.m do
+        parent <- maybe_resolved_parent
+        tree <- Commit.tree parent
+        files <- read_tree repo, tree
+        return files
+      end
+      _ ->
+        maybe_files = {:ok, %{}}
+    end
+
+    maybe_commit = Error.m do
+      # creating new commit
+      files <- maybe_files
+      files <- transformation.(files)
+      parents <- case maybe_resolved_parent do
+                   {:ok, %Object{id: parent_id}} -> {:ok, [parent_id]}
+                   _ -> {:ok, []}
+                 end
+      commit <- make_commit repo, message, files, parents, sig
+      return commit
+    end
+    if String.starts_with?(reference, "refs/heads/") do
+      Error.m do
+        # updating reference
+        commit <- maybe_commit
+        _ref <- Reference.create repo, reference, commit, :true
+        return commit
+      end
+    else
+      {:error, :not_found}
+    end
+  end
+
   defp write_tree repo, files do
     {:ok, odb} = Repository.odb repo
     {:ok, idx} = Index.new
@@ -53,7 +94,6 @@ defmodule Eetoul.RepoUtils do
   end
 
   defp read_tree repo, tree, path do
-    {:ok, odb} = Repository.odb repo
     files = for %TreeEntry{name: name, mode: mode, type: type, id: id} <- tree do
       if path != "" do
         name = "#{path}/#{name}"
