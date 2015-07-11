@@ -18,34 +18,34 @@ defmodule Eetoul.Test.SampleTreeRepo do
   """
 
   use Geef
-  import Eetoul.RepoUtils
+  alias Eetoul.RepoUtils
 
   @doc ""
   def create path do
     :ok = File.mkdir path
     {:ok, repo} = Repository.init path, true
 
-    {:ok, first_commit} = make_commit(repo, "First",
-                                      %{"greeting" => "Hello",
-                                        "target" => "world"})
-    {:ok, second_commit} = make_commit(repo, "Second",
-                                       %{"greeting" => "Hello",
-                                         "target" => "world",
-                                         "dist/total" => "Hello, world!"},
-                                       [first_commit])
-    {:ok, third_commit} = make_commit(repo, "Third",
-                                      %{"greeting" => "Bonjour",
-                                        "target" => "monde"},
-                                      [first_commit])
-    {:ok, fourth_commit} = make_commit(repo, "Fourth",
-                                       %{"greeting" => "Bonjour",
-                                         "target" => "monde",
-                                         "dist/total" => "Bonjour, monde!"},
-                                       [second_commit, third_commit])
-    {:ok, fifth_commit} = make_commit(repo, "Fifth",
-                                      %{"greeting" => "Ciao",
-                                        "target" => "mundo"},
-                                      [third_commit])
+    {:ok, first_commit} = RepoUtils.make_commit(repo, "First",
+                                                %{"greeting" => "Hello",
+                                                  "target" => "world"})
+    {:ok, second_commit} = RepoUtils.make_commit(repo, "Second",
+                                                 %{"greeting" => "Hello",
+                                                   "target" => "world",
+                                                   "dist/total" => "Hello, world!"},
+                                                 [first_commit])
+    {:ok, third_commit} = RepoUtils.make_commit(repo, "Third",
+                                                %{"greeting" => "Bonjour",
+                                                  "target" => "monde"},
+                                                [first_commit])
+    {:ok, fourth_commit} = RepoUtils.make_commit(repo, "Fourth",
+                                                 %{"greeting" => "Bonjour",
+                                                   "target" => "monde",
+                                                   "dist/total" => "Bonjour, monde!"},
+                                                 [second_commit, third_commit])
+    {:ok, fifth_commit} = RepoUtils.make_commit(repo, "Fifth",
+                                                %{"greeting" => "Ciao",
+                                                  "target" => "mundo"},
+                                                [third_commit])
 
     {:ok, _ref} = Reference.create repo, "refs/tags/first", first_commit
     {:ok, _ref} = Reference.create repo, "refs/tags/second", second_commit
