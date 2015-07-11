@@ -3,6 +3,8 @@ defmodule Eetoul.Commands.Create do
   require Monad.Error, as: Error
   alias Eetoul.RepoUtils
 
+  def description, do: "creates a new Eetoul integration branch"
+
   command do
     new_release :release
     reference :base_branch

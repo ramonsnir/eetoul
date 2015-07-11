@@ -3,6 +3,8 @@ defmodule Eetoul.Commands.Cat do
   require Monad.Error, as: Error
   alias Eetoul.RepoUtils
 
+  def description, do: "prints the Eetoul spec"
+
   command do
     release :release
     flag :color

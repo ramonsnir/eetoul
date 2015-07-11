@@ -3,6 +3,8 @@ defmodule Eetoul.Commands.Archive do
   require Monad.Error, as: Error
   alias Eetoul.RepoUtils
 
+  def description, do: "archives the Eetoul integration branch"
+
   command do
     release :release
     flag :force

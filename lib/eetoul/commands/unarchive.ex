@@ -3,6 +3,8 @@ defmodule Eetoul.Commands.Unarchive do
   require Monad.Error, as: Error
   alias Eetoul.RepoUtils
 
+  def description, do: "unarchives the Eetoul spec"
+
   command do
     archived_release :archived_release
     flag :force

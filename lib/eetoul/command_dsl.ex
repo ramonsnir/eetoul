@@ -13,11 +13,6 @@ defmodule Eetoul.CommandDSL do
         get_module_cli_name __MODULE__
       end
 
-      @doc false
-      def description do
-        @moduledoc
-      end
-
       @validations []
     end
   end

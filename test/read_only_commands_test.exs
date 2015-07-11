@@ -17,6 +17,13 @@ defmodule EetoulReadOnlyCommandsTest do
     end
   end
 
+  test "`help` prints full help", meta do
+    call = fn ->
+      CLI.run_command meta[:repo], ["help"]
+    end
+    assert capture_io(call) == %{value: {:ok, nil}, stdout: File.read!("HELP.txt"), stderr: ""}
+  end
+
   test "`cat first-release` prints release spec", meta do
     call = fn ->
       CLI.run_command meta[:repo], ["cat", "first-release"]

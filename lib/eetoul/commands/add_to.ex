@@ -3,6 +3,8 @@ defmodule Eetoul.Commands.AddTo do
   require Monad.Error, as: Error
   alias Eetoul.RepoUtils
 
+  def description, do: "adds a step to the Eetoul spec"
+
   command do
     release :release
     reference :branch

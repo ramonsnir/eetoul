@@ -4,6 +4,8 @@ defmodule Eetoul.Commands.Init do
   require Monad.Error, as: Error
   alias Eetoul.RepoUtils
 
+  def description, do: "initialized the Eetoul spec branch"
+
   command do: ()
 
   def run repo, _args do

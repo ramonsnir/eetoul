@@ -3,6 +3,8 @@ defmodule Eetoul.Commands.Acat do
   require Monad.Error, as: Error
   alias Eetoul.RepoUtils
 
+  def description, do: "prints the Eetoul spec (for an archived spec)"
+
   command do
     archived_release :archived_release
     flag :color

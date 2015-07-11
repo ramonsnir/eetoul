@@ -32,7 +32,10 @@ defmodule Eetoul.CLI do
   @commands (command_file_names
              |> Enum.map(&(String.replace(&1, ".ex", "")))
              |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1, (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
+             |> Enum.sort
              |> Enum.map(&(:'Elixir.Eetoul.Commands.#{&1}')))
+
+  def commands, do: @commands
 
   defp cli_command(repo, command, options \\ [])
   for command <- @commands do
