@@ -14,6 +14,8 @@ defmodule Eetoul.Test.Utils do
                 value
               end))
         end))
-    Agent.get result, &(&1)
+    value = Agent.get result, &(&1)
+    :ok = Agent.stop result
+    value
   end
 end
