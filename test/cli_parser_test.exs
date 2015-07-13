@@ -18,8 +18,8 @@ defmodule EetoulCLIParserTest do
   end
   
   test "`edit <release>`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["edit", "first-release"]) ==
-      %{release: "first-release"}
+    assert %{release: "first-release"} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["edit", "first-release"])
   end
 
   test "`edit <new-release>` fails", meta do
@@ -35,8 +35,8 @@ defmodule EetoulCLIParserTest do
   end
 
   test "`edit <release> --amend`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["edit", "first-release", "--amend"]) ==
-      %{release: "first-release", amend: true}
+    assert %{release: "first-release", amend: true} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["edit", "first-release", "--amend"])
   end
 
   test "`edit` fails", meta do
@@ -58,13 +58,13 @@ defmodule EetoulCLIParserTest do
   end
 
   test "`create <new-release> <branch>`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-branch"]) ==
-      %{release: "zeroth-release", base_branch: "first-branch"}
+    assert %{release: "zeroth-release", base_branch: "first-branch"} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-branch"])
   end
 
   test "`create <new-release> <tag>`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-tag"]) ==
-      %{release: "zeroth-release", base_branch: "first-tag"}
+    assert %{release: "zeroth-release", base_branch: "first-tag"} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["create", "zeroth-release", "first-tag"])
   end
 
   test "`create <new-release> <wrong-branch>` fails", meta do
@@ -80,8 +80,8 @@ defmodule EetoulCLIParserTest do
   end
 
   test "`unarchive <archived-release>`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["unarchive", "ancient-release"]) ==
-      %{archived_release: "ancient-release"}
+    assert %{archived_release: "ancient-release"} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["unarchive", "ancient-release"])
   end
 
   test "`unarchive <release>` fails", meta do
@@ -97,13 +97,11 @@ defmodule EetoulCLIParserTest do
   end
 
   test "`init`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["init"]) ==
-      %{}
+    assert %{} == CLI.test_cli_argument_parser(meta[:repo], ["init"])
   end
 
   test "`specs-push`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["specs-push"]) ==
-      %{}
+    assert %{} == CLI.test_cli_argument_parser(meta[:repo], ["specs-push"])
   end
 
   test "`init <release>` fails", meta do
@@ -113,8 +111,8 @@ defmodule EetoulCLIParserTest do
   end
 
   test "`add-to <release> <branch> --squash --message \"foo bar\"`", meta do
-    assert CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--message", "foo bar"]) ==
-      %{release: "first-release", branch: "first-branch", squash: true, message: "foo bar"}
+    assert %{release: "first-release", branch: "first-branch", squash: true, message: "foo bar"} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--message", "foo bar"])
   end
 
   test "`add-to <release> <branch> --squash` fails", meta do

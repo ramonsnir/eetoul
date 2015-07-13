@@ -34,10 +34,10 @@ defmodule Eetoul.RepoUtils do
     case maybe_resolved_parent do
       {:ok, _} ->
         maybe_files = Error.m do
-        parent <- maybe_resolved_parent
-        tree <- Commit.tree parent
-        files <- read_tree repo, tree
-        return files
+          parent <- maybe_resolved_parent
+          tree <- Commit.tree parent
+          files <- read_tree repo, tree
+          return files
       end
       _ ->
         maybe_files = {:ok, %{}}
@@ -46,7 +46,7 @@ defmodule Eetoul.RepoUtils do
     maybe_commit = Error.m do
       # creating new commit
       files <- maybe_files
-      files <- transformation.(files)
+      files <- {:ok, transformation.(files)}
       parents <- case maybe_resolved_parent do
                    {:ok, %Object{id: parent_id}} -> {:ok, [parent_id]}
                    _ -> {:ok, []}

@@ -29,11 +29,11 @@ defmodule EetoulRemoteCommandsTest do
     call = fn ->
       CLI.run_command meta[:repo], ["specs-push", "--remote", "origin"]
     end
-    assert %{value: {:ok, nil}, stderr: ""} = capture_io(call)
+    assert %{stderr: ""} = capture_io(call)
     expected_value =
       ManualCommands.exec("git show eetoul-spec --format=format:%H")
     |> String.split(["\n", "\r"], trim: true)
     |> Enum.at(0)
-    assert ManualCommands.exec("git ls-remote origin") == "#{expected_value}\trefs/heads/eetoul-spec\n"
+    assert "#{expected_value}\trefs/heads/eetoul-spec\n" == ManualCommands.exec("git ls-remote origin")
   end
 end

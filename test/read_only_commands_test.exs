@@ -21,34 +21,35 @@ defmodule EetoulReadOnlyCommandsTest do
     call = fn ->
       CLI.run_command meta[:repo], ["help"]
     end
-    assert capture_io(call) == %{value: {:ok, nil}, stdout: File.read!("HELP.txt"), stderr: ""}
+    expected_help = File.read! "HELP.txt"
+    assert %{stdout: ^expected_help, stderr: ""} = capture_io(call)
   end
 
   test "`cat first-release` prints release spec", meta do
     call = fn ->
       CLI.run_command meta[:repo], ["cat", "first-release"]
     end
-    assert capture_io(call) == %{value: {:ok, nil}, stdout: "checkout first-branch\ntake first-branch\n", stderr: ""}
+    assert %{stdout: "checkout first-branch\ntake first-branch\n", stderr: ""} = capture_io(call)
   end
 
   test "`cat no-release` prints error message", meta do
     call = fn ->
       CLI.run_command meta[:repo], ["cat", "no-release"]
     end
-    assert capture_io(call) == %{value: {:ok, nil}, stdout: "", stderr: "The release \"no-release\" does not exist.\n"}
+    assert %{stdout: "", stderr: "The release \"no-release\" does not exist.\n"} = capture_io(call)
   end
 
   test "`acat ancient-release` prints archived release spec", meta do
     call = fn ->
       CLI.run_command meta[:repo], ["acat", "ancient-release"]
     end
-    assert capture_io(call) == %{value: {:ok, nil}, stdout: "checkout no-commit\n", stderr: ""}
+    assert %{stdout: "checkout no-commit\n", stderr: ""} = capture_io(call)
   end
 
   test "`acat no-ancient-release` prints error message", meta do
     call = fn ->
       CLI.run_command meta[:repo], ["acat", "no-ancient-release"]
     end
-    assert capture_io(call) == %{value: {:ok, nil}, stdout: "", stderr: "The archived release \"no-ancient-release\" does not exist.\n"}
+    assert %{stdout: "", stderr: "The archived release \"no-ancient-release\" does not exist.\n"} = capture_io(call)
   end
 end

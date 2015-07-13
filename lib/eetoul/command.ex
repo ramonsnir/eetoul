@@ -22,10 +22,5 @@ defmodule Eetoul.Command do
 
   defcallback validations() :: [validation]
 
-  @type command_result :: (
-    {:ok, nil} |
-    {:error, any}
-  )
-
-  defcallback run(repo, parsed_arguments) :: command_result
+  defcallback run(repo, parsed_arguments) :: any
 end
