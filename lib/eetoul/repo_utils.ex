@@ -1,7 +1,6 @@
 defmodule Eetoul.RepoUtils do
   use Geef
   require Monad.Error, as: Error
-  alias Geef.Index
   alias Geef.Index.Entry
 
   @doc ""
