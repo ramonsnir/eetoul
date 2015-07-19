@@ -79,6 +79,12 @@ defmodule EetoulCLIParserTest do
     end
   end
 
+  test "`create <existing-archived-release> <branch>` fails", meta do
+    assert_raise ParseError, "The release \"ancient-release\" already exists.", fn ->
+      CLI.test_cli_argument_parser meta[:repo], ["create", "ancient-release", "first-branch"]
+    end
+  end
+
   test "`unarchive <archived-release>`", meta do
     assert %{archived_release: "ancient-release"} ==
       CLI.test_cli_argument_parser(meta[:repo], ["unarchive", "ancient-release"])

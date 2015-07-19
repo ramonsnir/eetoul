@@ -73,8 +73,8 @@ defmodule Eetoul.CLI do
     end
   end
   defp parse_arguments repo, [{:release, name, :new} | specs], [value | args] do
-    case read_spec repo, value do
-      {:error, _} ->
+    case {read_spec(repo, value), read_spec(repo, ".archive/#{value}")} do
+      {{:error, _}, {:error, _}} ->
         parse_arguments(repo, specs, args)
         |> Dict.put(name, value)
       _ -> raise ParseError, message: "The #{prettify_name name} \"#{value}\" already exists."
