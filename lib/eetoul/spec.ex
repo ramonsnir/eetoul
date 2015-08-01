@@ -2,10 +2,17 @@ defmodule Eetoul.Spec.ParseError do
   defexception message: "Invalid spec."
 end
 
-defmodule Eetoul.Spec do
-  alias Eetoul.Spec.ParseError
+defmodule Eetoul.Spec.ValidationError do
+  defexception message: "Invalid spec."
+end
 
-  @type eetoul_spec :: [(
+defmodule Eetoul.Spec do
+  use Geef
+  alias Eetoul.Spec.ParseError
+  alias Eetoul.Spec.ValidationError
+  alias Eetoul.RepoUtils
+
+  @type t :: [(
     {:checkout, String.t} |
     {:take, String.t, (:default | {:squash, String.t} | :merge)}
   )]
@@ -50,6 +57,42 @@ defmodule Eetoul.Spec do
         validate_argument.(:reference, reference, true)
         validate_argument.(:message, message, false)
         {:take, reference, :merge}
+    end
+  end
+
+  def validate repo, spec do
+    case Enum.at(spec, 0) do
+      {:checkout, _} -> :ok
+      _ ->
+        raise ValidationError, message: "First line in spec must be a `checkout`."
+    end
+    spec
+    |> Enum.drop(1)
+    |> Enum.each(fn
+      {:checkout, _} ->
+        raise ValidationError, message: "Cannot `checkout` twice in the same spec."
+      _ -> :ok
+    end)
+
+    spec
+    |> Enum.each(&(validate_line(repo, &1)))
+  end
+
+  defp validate_line repo, line do
+    reference =
+      (line
+       |> Tuple.to_list
+       |> Enum.at(1))
+    # first, checking if there's such reference in the repository
+    case Reference.dwim(repo, reference) do
+      {:ok, _} -> :ok
+      _ ->
+        # second, checking if there's such a spec
+        case RepoUtils.read_file(repo, "refs/heads/eetoul-spec", reference) do
+          {:ok, _} -> :ok
+          _ ->
+            raise ValidationError, message: "Cannot find reference \"#{reference}\"."
+        end
     end
   end
 end
