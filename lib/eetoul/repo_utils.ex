@@ -6,7 +6,7 @@ defmodule Eetoul.RepoUtils do
   @doc ""
   def make_commit repo, message, files, parents \\ [], sig \\ nil do
     unless sig do
-      sig = Signature.now "Eetoul Test", "test@eetoul"
+      sig = Signature.now "Eetoul", "eetoul@eetoul"
     end
     {:ok, tree_id} = write_tree repo, files
     Commit.create repo, sig, sig, message, tree_id, parents
@@ -57,7 +57,7 @@ defmodule Eetoul.RepoUtils do
       Error.m do
         # updating reference
         commit <- maybe_commit
-        _ref <- Reference.create repo, reference, commit, :true
+        _ref <- Reference.create repo, reference, commit, true
         return commit
       end
     else
