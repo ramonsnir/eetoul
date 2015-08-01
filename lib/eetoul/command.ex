@@ -2,7 +2,7 @@ defmodule Eetoul.Command do
   use Behaviour
 
   @type argument :: (
-    {:release, String.t, (:new|:existing|:archived)} |
+    {:release, String.t, (:new | :existing | :archived)} |
     {:reference, String.t} |
     {:flag, String.t} |
     {:string, String.t}

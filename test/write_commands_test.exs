@@ -54,6 +54,18 @@ defmodule EetoulWriteCommandsTest do
       CLI.run_command meta[:repo], ["cat", "first-release"]
     end
     assert %{stdout: "checkout first\ntake second\ntake-squash third Third tag is here\ntake-merge fourth\n", stderr: ""} = capture_io(call)
+    call = fn ->
+      CLI.run_command meta[:repo], ["rename", "first-release", "second-release"]
+    end
+    assert %{stdout: "Renamed \"first-release\" to \"second-release\".\n", stderr: ""} = capture_io(call)
+    call = fn ->
+      CLI.run_command meta[:repo], ["cat", "second-release"]
+    end
+    assert %{stdout: "checkout first\ntake second\ntake-squash third Third tag is here\ntake-merge fourth\n", stderr: ""} = capture_io(call)
+    call = fn ->
+      CLI.run_command meta[:repo], ["cat", "first-release"]
+    end
+    assert %{stdout: "", stderr: "The release \"first-release\" does not exist.\n"} = capture_io(call)
   end
 
   test "`init`, `create` and `archive` and `unarchive`", meta do
