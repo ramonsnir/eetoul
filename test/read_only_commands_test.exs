@@ -1,12 +1,12 @@
 defmodule EetoulReadOnlyCommandsTest do
   use ExUnit.Case
   import Eetoul.Test.Utils
+  alias Eetoul.Utils
   alias Eetoul.CLI
   alias Eetoul.Test.SampleSpecRepo
 
   setup_all do
-    {a, b, c} = :erlang.timestamp
-    :random.seed a, b, c
+    Utils.seed
     path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
     File.rm_rf path
     on_exit fn -> File.rm_rf path end

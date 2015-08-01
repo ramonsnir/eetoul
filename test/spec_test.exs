@@ -1,6 +1,7 @@
 defmodule EetoulSpecTest do
   use ExUnit.Case, async: true
   require Monad.Error, as: Error
+  alias Eetoul.Utils
   alias Eetoul.Spec
   alias Eetoul.Spec.ParseError
   alias Eetoul.Spec.ValidationError
@@ -8,8 +9,7 @@ defmodule EetoulSpecTest do
   alias Eetoul.Test.SampleSpecRepo
 
   setup_all do
-    {a, b, c} = :erlang.timestamp
-    :random.seed a, b, c
+    Utils.seed
     tree_path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
     File.rm_rf tree_path
     on_exit fn -> File.rm_rf tree_path end

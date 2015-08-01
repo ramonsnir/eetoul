@@ -1,13 +1,13 @@
 defmodule EetoulRemoteCommandsTest do
   use ExUnit.Case
   import Eetoul.Test.Utils
+  alias Eetoul.Utils
   alias Eetoul.CLI
   alias Eetoul.ManualCommands
   alias Eetoul.Test.SampleRemoteRepo
 
   setup_all do
-    {a, b, c} = :erlang.timestamp
-    :random.seed a, b, c
+    Utils.seed
     :ok
   end
 

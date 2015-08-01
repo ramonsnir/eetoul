@@ -1,12 +1,12 @@
 defmodule EetoulWriteCommandsTest do
   use ExUnit.Case
   import Eetoul.Test.Utils
+  alias Eetoul.Utils
   alias Eetoul.CLI
   alias Eetoul.Test.SampleTreeRepo
 
   setup_all do
-    {a, b, c} = :erlang.timestamp
-    :random.seed a, b, c
+    Utils.seed
     :ok
   end
 
