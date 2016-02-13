@@ -1,3 +1,3 @@
 %{"colorful": {:hex, :colorful, "0.6.0"},
-  "geef": {:git, "https://github.com/ramonsnir/geef.git", "f48c7c5f43286927216812d3b4c6df558422d2e0", []},
-  "monad": {:hex, :monad, "1.0.4"}}
+  "geef": {:git, "https://github.com/ramonsnir/geef.git", "5350b1fb783119d1d9e9ca5ef4c5b6d7381a0261", []},
+  "monad": {:hex, :monad, "1.0.5"}}
