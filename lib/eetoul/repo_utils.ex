@@ -30,17 +30,18 @@ defmodule Eetoul.RepoUtils do
       sig = Signature.now "Eetoul", "eetoul@eetoul"
     end
     maybe_resolved_parent = resolve_reference repo, reference
-    case maybe_resolved_parent do
-      {:ok, _} ->
-        maybe_files = Error.m do
-          parent <- maybe_resolved_parent
-          tree <- Commit.tree parent
-          files <- read_tree repo, tree
-          return files
+    maybe_files =
+      case maybe_resolved_parent do
+        {:ok, _} ->
+          Error.m do
+            parent <- maybe_resolved_parent
+            tree <- Commit.tree parent
+            files <- read_tree repo, tree
+            return files
+          end
+        _ ->
+          {:ok, %{}}
       end
-      _ ->
-        maybe_files = {:ok, %{}}
-    end
 
     maybe_commit = Error.m do
       # creating new commit

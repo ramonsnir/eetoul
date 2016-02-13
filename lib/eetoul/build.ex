@@ -24,7 +24,7 @@ defmodule Eetoul.Build do
     if target_name == nil do
       target_name = random_reference_name
     end
-    {[{:checkout, base}], directives} = Enum.split spec, 1
+    {[{:checkout, base}], _directives} = Enum.split spec, 1
     base_commit_id = resolve repo, base
     Reference.create! repo, target_name, base_commit_id, true
     :ok
