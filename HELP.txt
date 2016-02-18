@@ -2,7 +2,7 @@ Eetoul: a declarative tool for creating integration branches in git
 
 Available commands:
   acat <release> [--color]                                                   	prints the Eetoul spec (for an archived spec)
-  add-to <release> <git-reference> [--message <value>] [--merge] [--squash]  	adds a step to the Eetoul spec
+  add-to <release> <git-reference> [--message <value>] [--rebase] [--merge]  	adds a step to the Eetoul spec
   archive <release> [--force]                                                	archives the Eetoul integration branch
   cat <release> [--color]                                                    	prints the Eetoul spec
   create <release> <git-reference>                                           	creates a new Eetoul integration branch

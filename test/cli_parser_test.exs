@@ -116,26 +116,36 @@ defmodule EetoulCLIParserTest do
     end
   end
 
-  test "`add-to <release> <branch> --squash --message \"foo bar\"`", meta do
-    assert %{release: "first-release", branch: "first-branch", squash: true, message: "foo bar"} ==
-      CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--message", "foo bar"])
+  test "`add-to <release> <branch> --message \"foo bar\"`", meta do
+    assert %{release: "first-release", branch: "first-branch", message: "foo bar"} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--message", "foo bar"])
   end
 
-  test "`add-to <release> <branch> --squash` fails", meta do
-    assert_raise ParseError, "Argument --message is required if --squash is specified.", fn ->
-      CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash"]
+  test "`add-to <release> <branch> --merge`", meta do
+    assert %{release: "first-release", branch: "first-branch", merge: true} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--merge"])
+  end
+
+  test "`add-to <release> <branch> --rebase`", meta do
+    assert %{release: "first-release", branch: "first-branch", rebase: true} ==
+      CLI.test_cli_argument_parser(meta[:repo], ["add-to", "first-release", "first-branch", "--rebase"])
+  end
+
+  test "`add-to <release> <branch>` fails", meta do
+    assert_raise ParseError, "Argument --message is required if neither --merge nor --rebase are specified.", fn ->
+      CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch"]
     end
   end
 
   test "`add-to <release> <branch> --message` fails", meta do
-    assert_raise ParseError, "Argument --message is only allowed if --squash is specified.", fn ->
-      CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--message", "first-branch"]
+    assert_raise ParseError, "Argument --message is only allowed if neither --merge nor --rebase are specified.", fn ->
+      CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--message", "first-branch", "--merge"]
     end
   end
 
-  test "`add-to <release> <branch> --squash --merge` fails", meta do
-    assert_raise ParseError, "Arguments --squash and --merge cannot both be specified.", fn ->
-      CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--squash", "--merge"]
+  test "`add-to <release> <branch> --rebase --merge` fails", meta do
+    assert_raise ParseError, "Arguments --merge and --rebase cannot both be specified.", fn ->
+      CLI.test_cli_argument_parser meta[:repo], ["add-to", "first-release", "first-branch", "--rebase", "--merge"]
     end
   end
 

@@ -25,10 +25,10 @@ defmodule EetoulSpecTest do
   end
 
   test "parse valid spec" do
-    spec = "checkout first\ntake second\ntake-squash third Third tag is here\ntake-merge fourth\n"
+    spec = "checkout first\ntake-rebase second\ntake third Third tag is here\ntake-merge fourth\n"
     expected = [
       {:checkout, "first"},
-      {:take, "second", :default},
+      {:take, "second", :rebase},
       {:take, "third", {:squash, "Third tag is here"}},
       {:take, "fourth", :merge}
     ]
@@ -48,21 +48,21 @@ defmodule EetoulSpecTest do
   end
 
   test "`take-squash` needs arguments" do
-    assert_raise ParseError, "`take-squash` expects a reference argument.", fn ->
-      Spec.parse "take-squash"
+    assert_raise ParseError, "`take` expects a reference argument.", fn ->
+      Spec.parse "take"
     end
   end
 
   test "`take-squash` needs two arguments" do
-    assert_raise ParseError, "`take-squash` expects a message argument.", fn ->
-      Spec.parse "take-squash foo"
+    assert_raise ParseError, "`take` expects a message argument.", fn ->
+      Spec.parse "take foo"
     end
   end
 
   test "valid spec is valid", meta do
     spec = [
       {:checkout, "first"},
-      {:take, "second", :default},
+      {:take, "second", :rebase},
       {:take, "third", {:squash, "Third tag is here"}},
       {:take, "fourth", :merge}
     ]

@@ -7,21 +7,21 @@ defmodule Eetoul.Commands.AddTo do
   command do
     release :release
     reference :branch
-    flag :squash
     flag :merge
+    flag :rebase
     string :message
   end
 
-  validate "Arguments --squash and --merge cannot both be specified." do
-    !(args[:squash] && args[:merge])
+  validate "Arguments --merge and --rebase cannot both be specified." do
+    !(args[:merge] && args[:rebase])
   end
 
-  validate "Argument --message is required if --squash is specified." do
-    !(args[:squash] && !args[:message])
+  validate "Argument --message is required if neither --merge nor --rebase are specified." do
+    !(!args[:message] && !args[:merge] && !args[:rebase])
   end
 
-  validate "Argument --message is only allowed if --squash is specified." do
-    !(!args[:squash] && args[:message])
+  validate "Argument --message is only allowed if neither --merge nor --rebase are specified." do
+    !(args[:message] && (args[:merge] || args[:rebase]))
   end
 
   def run repo, args do
@@ -29,9 +29,9 @@ defmodule Eetoul.Commands.AddTo do
       Map.update! files, args[:release], fn file = %{content: value} ->
         new_line =
           case args do
-            %{branch: branch, squash: true, message: message} -> "take-squash #{branch} #{message}\n"
+            %{branch: branch, message: message} -> "take #{branch} #{message}\n"
             %{branch: branch, merge: true} -> "take-merge #{branch}\n"
-            %{branch: branch} -> "take #{branch}\n"
+            %{branch: branch, rebase: true} -> "take-rebase #{branch}\n"
           end
         Map.put file, :content, value <> new_line
       end

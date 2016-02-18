@@ -14,7 +14,7 @@ defmodule Eetoul.Spec do
 
   @type t :: [(
     {:checkout, String.t} |
-    {:take, String.t, (:default | {:squash, String.t} | :merge)}
+    {:take, String.t, ({:squash, String.t} | :merge | :rebase)}
   )]
 
   def parse spec do
@@ -47,16 +47,16 @@ defmodule Eetoul.Spec do
         {:checkout, reference}
       "take" ->
         validate_argument.(:reference, reference, true)
-        validate_argument.(:message, message, false)
-        {:take, reference, :default}
-      "take-squash" ->
-        validate_argument.(:reference, reference, true)
         validate_argument.(:message, message, true)
         {:take, reference, {:squash, message}}
       "take-merge" ->
         validate_argument.(:reference, reference, true)
         validate_argument.(:message, message, false)
         {:take, reference, :merge}
+      "take-rebase" ->
+        validate_argument.(:reference, reference, true)
+        validate_argument.(:message, message, false)
+        {:take, reference, :rebase}
     end
   end
 

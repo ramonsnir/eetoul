@@ -11,6 +11,7 @@ defmodule EetoulBuildTest do
     path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
     File.rm_rf path
     on_exit fn -> File.rm_rf path end
+    Application.put_env :eetoul, :git_path, path
     case SampleTreeRepo.create path do
       {:ok, repo} ->
         {:ok, repo: repo}

@@ -10,11 +10,11 @@ defmodule Eetoul do
     if path == nil do
       {:ok, path} = File.cwd
     end
+    Application.put_env :eetoul, :git_path, path
     case args do
       ["--help"] -> CLI.run_command self, ["help"]
       ["help"] -> CLI.run_command self, ["help"]
       _ ->
-        Application.put_env :eetoul, :git_path, path
         case Repository.open path do
           {:ok, repo} -> CLI.run_command repo, args
           {:error, message} -> IO.puts :stderr, Colorful.string(message, :red)
