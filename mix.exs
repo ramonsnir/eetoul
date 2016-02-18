@@ -30,8 +30,9 @@ defmodule Eetoul.Mixfile do
   end
 
   defp deps do
-    [{:geef, github: "ramonsnir/geef"},
-     {:colorful, "~> 0.6.0"},
-     {:monad, "~> 1.0.4"}]
+    [{:colorful, "~> 0.6.0"},
+     {:geef, github: "ramonsnir/geef"},
+     {:monad, "~> 1.0.4"},
+     {:short_maps, github: "whatyouhide/short_maps"}]
   end
 end

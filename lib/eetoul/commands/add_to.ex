@@ -1,4 +1,5 @@
 defmodule Eetoul.Commands.AddTo do
+  import ShortMaps
   use Eetoul.CommandDSL
   alias Eetoul.RepoUtils
 
@@ -26,14 +27,14 @@ defmodule Eetoul.Commands.AddTo do
 
   def run repo, args do
     {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "added #{args.branch} to release \"#{args.release}\"", fn files ->
-      Map.update! files, args.release, fn file = %{content: value} ->
+      Map.update! files, args.release, fn file = ~m{content}a ->
         new_line =
           case args do
-            %{branch: branch, message: message} -> "take #{branch} #{message}\n"
+            ~m{branch message}a -> "take #{branch} #{message}\n"
             %{branch: branch, merge: true} -> "take-merge #{branch}\n"
             %{branch: branch, rebase: true} -> "take-rebase #{branch}\n"
           end
-        Map.put file, :content, value <> new_line
+        Map.put file, :content, content <> new_line
       end
     end
     IO.puts "Added \"#{args.branch}\" to release \"#{args.release}\"."

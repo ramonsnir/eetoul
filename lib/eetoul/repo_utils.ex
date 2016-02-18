@@ -1,4 +1,5 @@
 defmodule Eetoul.RepoUtils do
+  import ShortMaps
   use Geef
   require Monad.Error, as: Error
   alias Geef.Index.Entry
@@ -17,8 +18,8 @@ defmodule Eetoul.RepoUtils do
     Error.m do
       commit <- resolve_reference repo, reference
       tree <- Commit.tree commit
-      %TreeEntry{id: file_id} <- Tree.get tree, path
-      blob <- Blob.lookup repo, file_id
+      ~m{%TreeEntry id}a <- Tree.get tree, path
+      blob <- Blob.lookup repo, id
       content <- Blob.content blob
       return content
     end
@@ -48,7 +49,7 @@ defmodule Eetoul.RepoUtils do
       files <- maybe_files
       files <- {:ok, transformation.(files)}
       parents <- case maybe_resolved_parent do
-                   {:ok, %Object{id: parent_id}} -> {:ok, [parent_id]}
+                   {:ok, ~m{%Object id}a} -> {:ok, [id]}
                    _ -> {:ok, []}
                  end
       commit <- make_commit repo, message, files, parents, sig
@@ -76,7 +77,7 @@ defmodule Eetoul.RepoUtils do
     Index.write_tree idx, repo
   end
 
-  defp write_entry odb, path, %{mode: mode, content: content} do
+  defp write_entry odb, path, ~m{mode content}a do
     {now_mega, now_secs, _} = :os.timestamp
     time = now_mega * 1_000_000 + now_secs
     {:ok, blob_id} = Odb.write odb, content, :blob
@@ -94,7 +95,7 @@ defmodule Eetoul.RepoUtils do
   end
 
   defp read_tree repo, tree, path do
-    files = for %TreeEntry{name: name, mode: mode, type: type, id: id} <- tree do
+    files = for ~m{%TreeEntry name mode type id}a <- tree do
       if path != "" do
         name = "#{path}/#{name}"
       end
@@ -102,9 +103,7 @@ defmodule Eetoul.RepoUtils do
         :blob ->
           {:ok, blob} = Blob.lookup repo, id
           {:ok, content} = Blob.content blob
-          [{name,
-            %{mode: mode,
-              content: content}}]
+          [{name, ~m{mode content}a}]
         :tree ->
           {:ok, tree} = Tree.lookup repo, id
           read_tree repo, tree, name

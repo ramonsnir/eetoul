@@ -1,4 +1,5 @@
 defmodule EetoulSpecTest do
+  import ShortMaps
   use ExUnit.Case, async: true
   require Monad.Error, as: Error
   alias Eetoul.Utils
@@ -20,7 +21,7 @@ defmodule EetoulSpecTest do
     Error.m do
       tree_repo <- SampleTreeRepo.create(tree_path)
       spec_repo <- SampleSpecRepo.create(spec_path)
-      return %{tree_repo: tree_repo, spec_repo: spec_repo}
+      return ~m{tree_repo spec_repo}a
     end
   end
 
