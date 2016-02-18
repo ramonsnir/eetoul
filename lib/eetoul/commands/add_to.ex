@@ -25,8 +25,8 @@ defmodule Eetoul.Commands.AddTo do
   end
 
   def run repo, args do
-    {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "added #{args[:branch]} to release \"#{args[:release]}\"", fn files ->
-      Map.update! files, args[:release], fn file = %{content: value} ->
+    {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "added #{args.branch} to release \"#{args.release}\"", fn files ->
+      Map.update! files, args.release, fn file = %{content: value} ->
         new_line =
           case args do
             %{branch: branch, message: message} -> "take #{branch} #{message}\n"
@@ -36,6 +36,6 @@ defmodule Eetoul.Commands.AddTo do
         Map.put file, :content, value <> new_line
       end
     end
-    IO.puts "Added \"#{args[:branch]}\" to release \"#{args[:release]}\"."
+    IO.puts "Added \"#{args.branch}\" to release \"#{args.release}\"."
   end
 end

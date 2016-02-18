@@ -10,10 +10,10 @@ defmodule Eetoul.Commands.Unarchive do
   end
 
   def run repo, args do
-    {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "unarchived release \"#{args[:archived_release]}\"", fn files ->
-      {file, files} = Map.pop files, ".archive/#{args[:archived_release]}"
-      Map.put files, args[:archived_release], file
+    {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "unarchived release \"#{args.archived_release}\"", fn files ->
+      {file, files} = Map.pop files, ".archive/#{args.archived_release}"
+      Map.put files, args.archived_release, file
     end
-    IO.puts "Unarchived release \"#{args[:archived_release]}\"."
+    IO.puts "Unarchived release \"#{args.archived_release}\"."
   end
 end

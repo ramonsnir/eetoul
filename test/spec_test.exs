@@ -66,7 +66,7 @@ defmodule EetoulSpecTest do
       {:take, "third", {:squash, "Third tag is here"}},
       {:take, "fourth", :merge}
     ]
-    assert :ok = Spec.validate(meta[:tree_repo], spec)
+    assert :ok = Spec.validate(meta.tree_repo, spec)
   end
 
   test "valid spec recursive is valid", meta do
@@ -74,13 +74,13 @@ defmodule EetoulSpecTest do
       {:checkout, "first-release"},
       {:take, "second-release", :default}
     ]
-    assert :ok = Spec.validate(meta[:spec_repo], spec)
+    assert :ok = Spec.validate(meta.spec_repo, spec)
   end
 
   test "must `checkout` at least once", meta do
     spec = []
     assert_raise ValidationError, "First line in spec must be a `checkout`.", fn ->
-      Spec.validate(meta[:tree_repo], spec)
+      Spec.validate(meta.tree_repo, spec)
     end
   end
 
@@ -90,7 +90,7 @@ defmodule EetoulSpecTest do
       {:checkout, "first"}
     ]
     assert_raise ValidationError, "Cannot `checkout` twice in the same spec.", fn ->
-      Spec.validate(meta[:tree_repo], spec)
+      Spec.validate(meta.tree_repo, spec)
     end
   end
 
@@ -99,7 +99,7 @@ defmodule EetoulSpecTest do
       {:checkout, "last"}
     ]
     assert_raise ValidationError, "Cannot find reference \"last\".", fn ->
-      Spec.validate(meta[:tree_repo], spec)
+      Spec.validate(meta.tree_repo, spec)
     end
   end
 end

@@ -11,7 +11,7 @@ defmodule Eetoul.Commands.Cat do
   end
 
   def run repo, args do
-    {:ok, spec} = RepoUtils.read_file repo, "refs/heads/eetoul-spec", args[:release]
+    {:ok, spec} = RepoUtils.read_file repo, "refs/heads/eetoul-spec", args.release
     Format.pretty_print spec
   end
 end

@@ -10,10 +10,10 @@ defmodule Eetoul.Commands.Archive do
   end
 
   def run repo, args do
-    {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "archived release \"#{args[:release]}\"", fn files ->
-      {file, files} = Map.pop files, args[:release]
-      Map.put files, ".archive/#{args[:release]}", file
+    {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "archived release \"#{args.release}\"", fn files ->
+      {file, files} = Map.pop files, args.release
+      Map.put files, ".archive/#{args.release}", file
     end
-    IO.puts "Archived release \"#{args[:release]}\"."
+    IO.puts "Archived release \"#{args.release}\"."
   end
 end
