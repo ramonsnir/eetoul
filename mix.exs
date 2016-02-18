@@ -21,11 +21,11 @@ defmodule Eetoul.Mixfile do
   end
 
   defp dialyzer do
-    paths = ["eetoul", "geef", "monad"]
+    paths = ~W[eetoul geef monad]
     |> Enum.map(&(File.cwd!() <> "/_build/#{Mix.env}/lib/" <> &1 <> "/ebin"))
 
-    [plt_apps: [:erts, :kernel, :stdlib, :mnesia],
-     flags: ["-Wunmatched_returns","-Werror_handling","-Wrace_conditions", "-Wno_opaque"],
+    [plt_apps: ~W[erts kernel stdlib mnesia]a,
+     flags: ~W[-Wunmatched_returns -Werror_handling -Wrace_conditions -Wno_opaque],
      paths: paths]
   end
 

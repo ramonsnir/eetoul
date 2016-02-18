@@ -27,7 +27,7 @@ defmodule EetoulRemoteCommandsTest do
   test "`push`", meta do
     assert ManualCommands.exec("git ls-remote origin") == ""
     call = fn ->
-      CLI.run_command meta.repo, ["specs-push", "--remote", "origin"]
+      CLI.run_command meta.repo, ~W[specs-push --remote origin]
     end
     assert %{stderr: ""} = capture_io(call)
     expected_value =

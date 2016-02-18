@@ -20,14 +20,14 @@ defmodule Eetoul.Commands.SpecsPush do
       end
     if args[:remote] do
       if remote != nil do
-        IO.puts :stderr, Colorful.string("Warning: overriding default remote #{remote}.", [:yellow, :faint])
+        IO.puts :stderr, Colorful.string("Warning: overriding default remote #{remote}.", ~W[yellow faint]a)
       else
         Config.set repo_config, "branch.eetoul-spec.remote", args[:remote]
       end
       remote = args[:remote]
     end
     if remote == nil do
-      IO.puts :stderr, Colorful.string("Cannot push without a default remote set.", :red)
+      IO.puts :stderr, Colorful.string("Cannot push without a default remote set.", ~W[red]a)
     else
       force = if args[:force] do
                 "--force"

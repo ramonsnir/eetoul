@@ -16,21 +16,21 @@ defmodule Eetoul.Format do
             [command, reference] -> [command, reference, nil]
             all -> all
           end
-        IO.write device, Colorful.string(command, [:default_color])
+        IO.write device, Colorful.string(command, ~W[default_color]a)
         if reference do
           IO.write device, " "
-          IO.write device, Colorful.string(reference, [:green, :bright])
+          IO.write device, Colorful.string(reference, ~W[green bright]a)
         end
         if message do
           IO.write device, " "
-          IO.write device, Colorful.string(message, [:default_color])
+          IO.write device, Colorful.string(message, ~W[default_color])
         end
       end
       if comment != nil do
         if code != "" do
           IO.write device, " "
         end
-        IO.write device, Colorful.string("##{comment}", [:green, :faint])
+        IO.write device, Colorful.string("##{comment}", ~W[green faint])
       end
       IO.puts device, ""
     end)

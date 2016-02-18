@@ -19,7 +19,7 @@ defmodule Eetoul.CLI do
       cli_command repo, argv
     rescue
       e in ParseError ->
-        {IO.puts(:stderr, Colorful.string(e.message, :red)), nil}
+        {IO.puts(:stderr, Colorful.string(e.message, ~W[red]a)), nil}
     end
   end
 

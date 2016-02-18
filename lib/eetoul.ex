@@ -12,12 +12,12 @@ defmodule Eetoul do
     end
     Application.put_env :eetoul, :git_path, path
     case args do
-      ["--help"] -> CLI.run_command self, ["help"]
-      ["help"] -> CLI.run_command self, ["help"]
+      ~W[--help] -> CLI.run_command self, ~W[help]
+      ~W[help] -> CLI.run_command self, ~W[help]
       _ ->
         case Repository.open path do
           {:ok, repo} -> CLI.run_command repo, args
-          {:error, message} -> IO.puts :stderr, Colorful.string(message, :red)
+          {:error, message} -> IO.puts :stderr, Colorful.string(message, ~W[red]a)
         end
     end
   end
