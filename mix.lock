@@ -1,4 +1,4 @@
 %{"colorful": {:hex, :colorful, "0.6.0"},
   "geef": {:git, "https://github.com/ramonsnir/geef.git", "5350b1fb783119d1d9e9ca5ef4c5b6d7381a0261", []},
   "monad": {:hex, :monad, "1.0.5"},
-  "short_maps": {:git, "https://github.com/whatyouhide/short_maps.git", "01fbb91ce1676f5e6f399c9cf8da31b3dfe5403a", []}}
+  "short_maps": {:hex, :short_maps, "0.1.1"}}

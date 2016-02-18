@@ -33,6 +33,6 @@ defmodule Eetoul.Mixfile do
     [{:colorful, "~> 0.6.0"},
      {:geef, github: "ramonsnir/geef"},
      {:monad, "~> 1.0.4"},
-     {:short_maps, github: "whatyouhide/short_maps"}]
+     {:short_maps, "~> 0.1.1"}]
   end
 end
