@@ -6,6 +6,7 @@ defmodule Eetoul.Build do
   use Geef
   alias Eetoul.Build.ReferenceError
   alias Eetoul.Spec
+  alias Eetoul.Merge
   alias Eetoul.RepoUtils
 
   @spec build(pid, (String.t | Spec.t)) :: :ok
@@ -24,10 +25,18 @@ defmodule Eetoul.Build do
     if target_name == nil do
       target_name = random_reference_name
     end
-    {[{:checkout, base}], _directives} = Enum.split spec, 1
+    {[{:checkout, base}], directives} = Enum.split spec, 1
     base_commit_id = resolve repo, base
-    Reference.create! repo, target_name, base_commit_id, true
+    commit_id = Enum.reduce(directives, base_commit_id,
+                            &(execute_directive repo, &2, &1))
+    Reference.create! repo, target_name, commit_id, true
     :ok
+  end
+
+  defp execute_directive repo, commit_id, {:take, ref, {:squash, message}} do
+    ref_commit_id = resolve repo, ref
+    {:ok, result_commit_id} = Merge.merge repo, ref_commit_id, commit_id
+    result_commit_id
   end
 
   defp resolve repo, reference do

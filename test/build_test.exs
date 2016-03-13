@@ -19,6 +19,11 @@ defmodule EetoulBuildTest do
     end
   end
 
+  setup do
+    Utils.seed
+    :ok
+  end
+
   test "build non-existent spec", meta do
     assert_raise ReferenceError, "Eetoul spec \"no-release\" was not found.", fn ->
       Build.build meta.repo, "no-release"
@@ -29,6 +34,13 @@ defmodule EetoulBuildTest do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/first"
     assert :ok = Build.build(meta.repo, "test-release-a", "refs/heads/test-release-a")
     {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-a"
+    assert expected == found
+  end
+
+  test "build a take", meta do
+    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/second"
+    assert :ok = Build.build(meta.repo, "test-release-b", "refs/heads/test-release-b")
+    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-b"
     assert expected == found
   end
 end
