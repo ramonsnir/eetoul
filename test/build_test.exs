@@ -32,15 +32,22 @@ defmodule EetoulBuildTest do
 
   test "build a single checkout", meta do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/first"
-    assert :ok = Build.build(meta.repo, "test-release-a", "refs/heads/test-release-a")
-    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-a"
+    assert :ok = Build.build(meta.repo, "test-release-checkout", "refs/heads/test-release-checkout")
+    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-checkout"
     assert expected == found
   end
 
   test "build a take", meta do
-    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/second"
-    assert :ok = Build.build(meta.repo, "test-release-b", "refs/heads/test-release-b")
-    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-b"
+    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/fourth"
+    assert :ok = Build.build(meta.repo, "test-release-take", "refs/heads/test-release-take")
+    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-take"
+    assert expected == found
+  end
+
+  test "build a squash", meta do
+    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/fourth"
+    assert :ok = Build.build(meta.repo, "test-release-squash", "refs/heads/test-release-squash")
+    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-squash"
     assert expected == found
   end
 end

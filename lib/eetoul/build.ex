@@ -35,6 +35,12 @@ defmodule Eetoul.Build do
 
   defp execute_directive repo, commit_id, {:take, ref, {:squash, message}} do
     ref_commit_id = resolve repo, ref
+    {:ok, merged_commit_id} = Merge.merge repo, ref_commit_id, commit_id
+    commit = Commit.lookup repo, merged_commit_id
+    merged_commit_id
+  end
+  defp execute_directive repo, commit_id, {:take, ref, :merge} do
+    ref_commit_id = resolve repo, ref
     {:ok, result_commit_id} = Merge.merge repo, ref_commit_id, commit_id
     result_commit_id
   end

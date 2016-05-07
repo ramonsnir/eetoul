@@ -55,10 +55,14 @@ defmodule Eetoul.Test.SampleTreeRepo do
     {:ok, _ref} = Reference.create repo, "refs/heads/master", fourth_commit
     {:ok, _ref} = Reference.create repo, "refs/heads/side-branch", fifth_commit
 
-    test_release_a = "checkout first\n"
-    test_release_b = """
+    test_release_checkout = "checkout first\n"
+    test_release_take = """
 checkout first
-take second Second
+take fourth Fourth
+"""
+    test_release_squash = """
+checkout first
+take-merge fourth
 """
     test_release_c = """
 checkout first
@@ -68,8 +72,9 @@ take-merge fifth
 """
 
     {:ok, spec_commit} = RepoUtils.make_commit(repo, "",
-                                               %{"test-release-a" => test_release_a,
-                                                 "test-release-b" => test_release_b,
+                                               %{"test-release-checkout" => test_release_checkout,
+                                                 "test-release-take" => test_release_take,
+                                                 "test-release-squash" => test_release_squash,
                                                  "test-release-c" => test_release_c},
                                                [])
     {:ok, _ref} = Reference.create repo, "refs/heads/eetoul-spec", spec_commit
