@@ -7,7 +7,7 @@ defmodule Eetoul.RepoUtils do
   @doc ""
   def make_commit repo, message, files, parents \\ [], sig \\ nil do
     unless sig do
-      sig = Signature.now "Eetoul", "eetoul@eetoul"
+      sig = %Signature{name: "Eetoul", email: "eetoul@eetoul", time: {{1000, 0, 0}, 0}}
     end
     {:ok, tree_id} = write_tree repo, files
     Commit.create repo, sig, sig, message, tree_id, parents
