@@ -11,7 +11,8 @@ defmodule Eetoul.Worktree do
   end
 
   def create repo, worktree_path, commit_id do
-    (output = ("Preparing " <> _)) = ManualCommands.exec("git worktree add --detach \"#{worktree_path}\" #{Base.encode16(commit_id)}")
+    (output = ("Preparing " <> _)) =
+      ManualCommands.exec("git worktree add --detach \"#{worktree_path}\" #{Base.encode16(commit_id)}")
     [^worktree_path, worktree_name] =
       output
     |> String.split(["\n", "\r"], trim: true)

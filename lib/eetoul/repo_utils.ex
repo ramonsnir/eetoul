@@ -33,13 +33,7 @@ defmodule Eetoul.RepoUtils do
     maybe_resolved_parent = resolve_reference repo, reference
     maybe_files =
       case maybe_resolved_parent do
-        {:ok, _} ->
-          Error.m do
-            parent <- maybe_resolved_parent
-            tree <- Commit.tree parent
-            files <- read_tree repo, tree
-            return files
-          end
+        {:ok, parent} -> files_from_commit repo, parent
         _ ->
           {:ok, %{}}
       end
@@ -64,6 +58,14 @@ defmodule Eetoul.RepoUtils do
       end
     else
       {:error, :not_found}
+    end
+  end
+
+  defp files_from_commit repo, commit do
+    Error.m do
+      tree <- Commit.tree commit
+      files <- read_tree repo, tree
+      return files
     end
   end
 
@@ -112,8 +114,8 @@ defmodule Eetoul.RepoUtils do
     Enum.flat_map files, &(&1)
   end
 
-  defp resolve_reference _repo, (commit = %Object{type: :commit}) do
-    {:ok, commit}
+  defp resolve_reference _repo, (ci = %Object{type: :commit}) do
+    {:ok, ci}
   end
   defp resolve_reference repo, reference do
     Error.m do

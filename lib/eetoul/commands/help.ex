@@ -1,5 +1,6 @@
 defmodule Eetoul.Commands.Help do
   use Eetoul.CommandDSL
+  alias Eetoul.CLI
 
   def description, do: "prints this message"
 
@@ -9,7 +10,7 @@ defmodule Eetoul.Commands.Help do
     IO.puts "Eetoul: a declarative tool for creating integration branches in git"
     IO.puts ""
     IO.puts "Available commands:"
-    commands = for command <- Eetoul.CLI.commands do
+    commands = for command <- CLI.commands do
       pretty_arguments = String.rstrip format_arguments(command.arguments)
       ["#{command.name} #{pretty_arguments}", command.description]
     end

@@ -1,4 +1,6 @@
-%{"colorful": {:hex, :colorful, "0.6.0"},
+%{"bunt": {:hex, :bunt, "0.1.6"},
+  "colorful": {:hex, :colorful, "0.6.0"},
+  "credo": {:hex, :credo, "0.3.13"},
   "geef": {:git, "https://github.com/ramonsnir/geef.git", "95053a693839a5e8eaa8266fd678ad9e6e9bd3d6", []},
   "monad": {:hex, :monad, "1.0.5"},
   "short_maps": {:hex, :short_maps, "0.1.1"}}

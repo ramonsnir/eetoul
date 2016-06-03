@@ -21,6 +21,7 @@ defmodule Eetoul.Test.SampleTreeRepo do
   alias Eetoul.RepoUtils
 
   @doc ""
+  @lint {Credo.Check.Refactor.ABCSize, false}
   def create path do
     :ok = File.mkdir path
     {:ok, repo} = Repository.init path, true

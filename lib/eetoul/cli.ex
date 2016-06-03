@@ -31,7 +31,8 @@ defmodule Eetoul.CLI do
 
   @commands (command_file_names
              |> Enum.map(&(String.replace(&1, ".ex", "")))
-             |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1, (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
+             |> Enum.map(&(Regex.replace(~r/(?:^|_)([a-z])/, &1,
+                     (fn _, x -> String.upcase x end), [global: true]))) # converting snake_case to PascalCase
              |> Enum.sort
              |> Enum.map(&(:'Elixir.Eetoul.Commands.#{&1}')))
 
@@ -63,7 +64,7 @@ defmodule Eetoul.CLI do
     |> Atom.to_string
     |> String.replace("_", " ")
   end
-  
+
   defp parse_arguments repo, [{:release, name, :existing} | specs], [value | args] do
     case read_spec repo, value do
       {:ok, _} ->
@@ -95,7 +96,12 @@ defmodule Eetoul.CLI do
   defp parse_arguments repo, [{:reference, name} | specs], [value | args] do
     case Reference.dwim repo, value do
       {:ok, %Reference{name: real_name}} ->
-        value = String.split(real_name, "/") |> Enum.reverse |> Enum.at(0)
+        value =
+          real_name
+        |> String.split("/")
+        |> Enum.reverse
+        |> Enum.at(0)
+
         parse_arguments(repo, specs, args)
         |> Dict.put(name, value)
       _ -> raise ParseError, message: "The #{prettify_name name} \"#{value}\" does not exist."

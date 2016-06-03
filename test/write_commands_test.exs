@@ -53,7 +53,8 @@ defmodule EetoulWriteCommandsTest do
     call = fn ->
       CLI.run_command meta.repo, ~W[cat first-release]
     end
-    assert %{stdout: "checkout first\ntake-rebase second\ntake third Third tag is here\ntake-merge fourth\n", stderr: ""} = capture_io(call)
+    stdout = "checkout first\ntake-rebase second\ntake third Third tag is here\ntake-merge fourth\n"
+    assert %{stdout: ^stdout, stderr: ""} = capture_io(call)
     call = fn ->
       CLI.run_command meta.repo, ~W[rename first-release second-release]
     end
@@ -61,7 +62,8 @@ defmodule EetoulWriteCommandsTest do
     call = fn ->
       CLI.run_command meta.repo, ~W[cat second-release]
     end
-    assert %{stdout: "checkout first\ntake-rebase second\ntake third Third tag is here\ntake-merge fourth\n", stderr: ""} = capture_io(call)
+    stdout = "checkout first\ntake-rebase second\ntake third Third tag is here\ntake-merge fourth\n"
+    assert %{stdout: ^stdout, stderr: ""} = capture_io(call)
     call = fn ->
       CLI.run_command meta.repo, ~W[cat first-release]
     end

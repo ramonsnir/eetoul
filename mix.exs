@@ -31,6 +31,7 @@ defmodule Eetoul.Mixfile do
 
   defp deps do
     [{:colorful, "~> 0.6.0"},
+     {:credo, "~> 0.3", only: [:dev, :test]},
      {:geef, github: "ramonsnir/geef"},
      {:monad, "~> 1.0.4"},
      {:short_maps, "~> 0.1.1"}]
