@@ -38,16 +38,16 @@ defmodule EetoulBuildTest do
   end
 
   test "build a take", meta do
-    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/fourth"
+    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/expected-test-release-take"
     assert :ok = Build.build(meta.repo, "test-release-take", "refs/heads/test-release-take")
     {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-take"
     assert expected == found
   end
 
-  test "build a squash", meta do
+  test "build a merge", meta do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/fourth"
-    assert :ok = Build.build(meta.repo, "test-release-squash", "refs/heads/test-release-squash")
-    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-squash"
+    assert :ok = Build.build(meta.repo, "test-release-merge", "refs/heads/test-release-merge")
+    {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-merge"
     assert expected == found
   end
 end
