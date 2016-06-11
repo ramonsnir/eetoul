@@ -5,36 +5,44 @@ end
 defmodule Eetoul.Build do
   use Geef
   alias Eetoul.Build.ReferenceError
+  alias Eetoul.Colorful
   alias Eetoul.Spec
   alias Eetoul.Merge
   alias Eetoul.RepoUtils
 
   @spec build(pid, (String.t | Spec.t)) :: :ok
-  def build repo, spec, target_name \\ nil
-  def build(repo, spec, target_name) when is_binary(spec) do
+  def build repo, spec, target_name \\ nil, output \\ :normal
+  def build(repo, spec, target_name, output) when is_binary(spec) do
     case RepoUtils.read_file(repo, "refs/heads/eetoul-spec", spec) do
       {:ok, spec_content} ->
         spec = Spec.parse spec_content
         :ok = Spec.validate repo, spec
-        build repo, spec, target_name
+        build repo, spec, target_name, output
       _ ->
         raise ReferenceError, message: "Eetoul spec \"#{spec}\" was not found."
     end
   end
-  def build repo, spec, target_name do
+  def build repo, spec, target_name, output do
     if target_name == nil do
       target_name = random_reference_name
     end
     {[{:checkout, base}], directives} = Enum.split spec, 1
+    if output == :normal do
+      IO.puts "Checking out '#{Colorful.string base, ~W[green]}'..."
+    end
     base_commit_id = resolve repo, base
     commit_id = Enum.reduce(directives, base_commit_id,
-                            &(execute_directive repo, &2, &1))
+                            &(execute_directive repo, &2, &1, output))
     Reference.create! repo, target_name, commit_id, true
     :ok
   end
 
-  defp execute_directive repo, commit_id, {:take, ref, {:squash, message}} do
-    merged_commit_id = execute_directive repo, commit_id, {:take, ref, :merge}
+  defp execute_directive repo, commit_id, directive, output \\ false
+  defp execute_directive repo, commit_id, {:take, ref, {:squash, message}}, output do
+    if output == :normal do
+      IO.puts "Taking '#{Colorful.string ref, ~W[blue]}' (squashed)..."
+    end
+    merged_commit_id = execute_directive repo, commit_id, {:take, ref, :merge}, true
     {:ok, commit} = Commit.lookup repo, merged_commit_id
     author = Commit.author! commit
     committer = Commit.committer! commit
@@ -42,7 +50,10 @@ defmodule Eetoul.Build do
     {:ok, result_commit_id} = Commit.create repo, author, committer, message, tree.id, [commit_id]
     result_commit_id
   end
-  defp execute_directive repo, commit_id, {:take, ref, :merge} do
+  defp execute_directive repo, commit_id, {:take, ref, :merge}, output do
+    if output == :normal do
+      IO.puts "Taking '#{Colorful.string ref, ~W[blue]}'..."
+    end
     ref_commit_id = resolve repo, ref
     {:ok, merged_commit_id} = Merge.merge repo, commit_id, ref_commit_id
     {:ok, commit} = Commit.lookup repo, merged_commit_id

@@ -32,21 +32,21 @@ defmodule EetoulBuildTest do
 
   test "build a single checkout", meta do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/first"
-    assert :ok = Build.build(meta.repo, "test-release-checkout", "refs/heads/test-release-checkout")
+    assert :ok = Build.build(meta.repo, "test-release-checkout", "refs/heads/test-release-checkout", :quiet)
     {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-checkout"
     assert expected == found
   end
 
   test "build a take", meta do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/expected-test-release-take"
-    assert :ok = Build.build(meta.repo, "test-release-take", "refs/heads/test-release-take")
+    assert :ok = Build.build(meta.repo, "test-release-take", "refs/heads/test-release-take", :quiet)
     {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-take"
     assert expected == found
   end
 
   test "build a merge", meta do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/expected-test-release-merge"
-    assert :ok = Build.build(meta.repo, "test-release-merge", "refs/heads/test-release-merge")
+    assert :ok = Build.build(meta.repo, "test-release-merge", "refs/heads/test-release-merge", :quiet)
     {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-merge"
     assert expected == found
   end
