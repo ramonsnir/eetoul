@@ -79,6 +79,7 @@ defmodule Eetoul.RepoUtils do
     Index.write_tree idx, repo
   end
 
+  @lint {Credo.Check.Readability.LargeNumbers, false}
   defp write_entry odb, path, ~m{mode content}a do
     {now_mega, now_secs, _} = :os.timestamp
     time = now_mega * 1_000_000 + now_secs
