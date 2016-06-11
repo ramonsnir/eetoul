@@ -44,8 +44,21 @@ defmodule Eetoul.Build do
   end
   defp execute_directive repo, commit_id, {:take, ref, :merge} do
     ref_commit_id = resolve repo, ref
-    {:ok, result_commit_id} = Merge.merge repo, ref_commit_id, commit_id
-    result_commit_id
+    {:ok, merged_commit_id} = Merge.merge repo, commit_id, ref_commit_id
+    {:ok, commit} = Commit.lookup repo, merged_commit_id
+    if Commit.parent_count!(commit) == 1 do
+      merged_commit_id
+    else
+      base_id = Commit.parent_id! commit, 0
+      parent_id = Commit.parent_id! commit, 1
+      {:ok, parent} = Commit.lookup repo, parent_id
+      author = Commit.author! parent
+      committer = Commit.committer! parent
+      tree = Commit.tree! commit
+      message = Commit.message! parent
+      {:ok, result_commit_id} = Commit.create repo, author, committer, "Merged #{ref}", tree.id, [base_id, parent_id]
+      result_commit_id
+    end
   end
 
   defp resolve repo, reference do

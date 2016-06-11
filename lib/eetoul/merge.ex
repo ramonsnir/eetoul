@@ -7,8 +7,7 @@ defmodule Eetoul.Merge do
     worktree = Worktree.create repo, base_commit_id
     ManualCommands.exec(worktree, "git merge \"#{Base.encode16 target_commit_id}\"")
     result_commit_id =
-      worktree
-    |> ManualCommands.exec("git rev-parse HEAD")
+      ManualCommands.exec(worktree, "git rev-parse HEAD")
     |> String.strip
     |> Base.decode16!(case: :mixed)
     :ok = Worktree.remove worktree

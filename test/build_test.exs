@@ -45,7 +45,7 @@ defmodule EetoulBuildTest do
   end
 
   test "build a merge", meta do
-    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/fourth"
+    {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/expected-test-release-merge"
     assert :ok = Build.build(meta.repo, "test-release-merge", "refs/heads/test-release-merge")
     {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-merge"
     assert expected == found

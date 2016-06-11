@@ -52,13 +52,18 @@ defmodule Eetoul.Test.SampleTreeRepo do
                             %{"greeting" => "Ciao",
                               "target" => "mundo"},
                             [third_commit])
-
     {:ok, expected_test_release_take} =
       RepoUtils.make_commit(repo, "Fourth squashed",
                             %{"greeting" => "Bonjour",
                               "target" => "monde",
                               "dist/total" => "Bonjour, monde!"},
                             [first_commit])
+    {:ok, expected_test_release_merge} =
+      RepoUtils.make_commit(repo, "Merged third",
+                            %{"greeting" => "Bonjour",
+                              "target" => "monde",
+                              "dist/total" => "Hello, world!"},
+                            [second_commit, third_commit])
 
     {:ok, _ref} = Reference.create repo, "refs/tags/first", first_commit
     {:ok, _ref} = Reference.create repo, "refs/tags/second", second_commit
@@ -68,6 +73,7 @@ defmodule Eetoul.Test.SampleTreeRepo do
     {:ok, _ref} = Reference.create repo, "refs/heads/master", fourth_commit
     {:ok, _ref} = Reference.create repo, "refs/heads/side-branch", fifth_commit
     {:ok, _ref} = Reference.create repo, "refs/tags/expected-test-release-take", expected_test_release_take
+    {:ok, _ref} = Reference.create repo, "refs/tags/expected-test-release-merge", expected_test_release_merge
 
     test_release_checkout = "checkout first\n"
     test_release_take = """
@@ -76,7 +82,8 @@ take fourth Fourth squashed
 """
     test_release_merge = """
 checkout first
-take-merge fourth
+take-merge second
+take-merge third
 """
     test_release_multiple = """
 checkout first
