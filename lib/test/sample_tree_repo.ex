@@ -44,8 +44,8 @@ defmodule Eetoul.Test.SampleTreeRepo do
     {:ok, fourth_commit} =
       RepoUtils.make_commit(repo, "Fourth",
                             %{"greeting" => "Bonjour",
-                              "target" => "monde",
-                              "dist/total" => "Bonjour, monde!"},
+                              "target" => "continent",
+                              "dist/total" => "Bonjour, continent!"},
                             [second_commit, third_commit])
     {:ok, fifth_commit} =
       RepoUtils.make_commit(repo, "Fifth",
@@ -55,8 +55,8 @@ defmodule Eetoul.Test.SampleTreeRepo do
     {:ok, expected_test_release_take} =
       RepoUtils.make_commit(repo, "Fourth, squashed",
                             %{"greeting" => "Bonjour",
-                              "target" => "monde",
-                              "dist/total" => "Bonjour, monde!"},
+                              "target" => "continent",
+                              "dist/total" => "Bonjour, continent!"},
                             [first_commit])
     {:ok, expected_test_release_merge} =
       RepoUtils.make_commit(repo, "Merged third",
