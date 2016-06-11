@@ -37,7 +37,6 @@ defmodule Eetoul.Build do
     :ok
   end
 
-  defp execute_directive repo, commit_id, directive, output \\ false
   defp execute_directive repo, commit_id, {:take, ref, {:squash, message}}, output do
     if output == :normal do
       IO.puts "Taking '#{Colorful.string ref, ~W[blue]}' (squashed)..."
@@ -60,16 +59,19 @@ defmodule Eetoul.Build do
     if Commit.parent_count!(commit) == 1 do
       merged_commit_id
     else
-      base_id = Commit.parent_id! commit, 0
-      parent_id = Commit.parent_id! commit, 1
-      {:ok, parent} = Commit.lookup repo, parent_id
-      author = Commit.author! parent
-      committer = Commit.committer! parent
-      tree = Commit.tree! commit
-      message = Commit.message! parent
-      {:ok, result_commit_id} = Commit.create repo, author, committer, "Merged #{ref}", tree.id, [base_id, parent_id]
-      result_commit_id
+      reformat_merge_commit repo, ref, commit
     end
+  end
+
+  defp reformat_merge_commit repo, ref, commit do
+    base_id = Commit.parent_id! commit, 0
+    parent_id = Commit.parent_id! commit, 1
+    {:ok, parent} = Commit.lookup repo, parent_id
+    author = Commit.author! parent
+    committer = Commit.committer! parent
+    tree = Commit.tree! commit
+    {:ok, result_commit_id} = Commit.create repo, author, committer, "Merged #{ref}", tree.id, [base_id, parent_id]
+    result_commit_id
   end
 
   defp resolve repo, reference do
