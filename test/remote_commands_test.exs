@@ -25,15 +25,15 @@ defmodule EetoulRemoteCommandsTest do
   end
 
   test "`push`", meta do
-    assert ManualCommands.exec("git ls-remote origin") == ""
+    assert ManualCommands.exec!("git ls-remote origin") == ""
     call = fn ->
       CLI.run_command meta.repo, ~W[specs-push --remote origin]
     end
     assert %{stderr: ""} = capture_io(call)
     expected_value =
-      ManualCommands.exec("git show eetoul-spec --format=format:%H")
+      ManualCommands.exec!("git show eetoul-spec --format=format:%H")
     |> String.split(["\n", "\r"], trim: true)
     |> Enum.at(0)
-    assert "#{expected_value}\trefs/heads/eetoul-spec\n" == ManualCommands.exec("git ls-remote origin")
+    assert "#{expected_value}\trefs/heads/eetoul-spec\n" == ManualCommands.exec!("git ls-remote origin")
   end
 end

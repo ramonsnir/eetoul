@@ -53,7 +53,7 @@ defmodule Eetoul.Test.SampleTreeRepo do
                               "target" => "mundo"},
                             [third_commit])
     {:ok, expected_test_release_take} =
-      RepoUtils.make_commit(repo, "Fourth squashed",
+      RepoUtils.make_commit(repo, "Fourth, squashed",
                             %{"greeting" => "Bonjour",
                               "target" => "monde",
                               "dist/total" => "Bonjour, monde!"},
@@ -78,7 +78,7 @@ defmodule Eetoul.Test.SampleTreeRepo do
     test_release_checkout = "checkout first\n"
     test_release_take = """
 checkout first
-take fourth Fourth squashed
+take fourth Fourth, squashed
 """
     test_release_merge = """
 checkout first

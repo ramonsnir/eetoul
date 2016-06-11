@@ -12,13 +12,13 @@ defmodule Eetoul.Worktree do
 
   def create repo, worktree_path, commit_id do
     (output = ("Preparing " <> _)) =
-      ManualCommands.exec("git worktree add --detach \"#{worktree_path}\" #{Base.encode16(commit_id)}")
+      ManualCommands.exec!("git worktree add --detach \"#{worktree_path}\" #{Base.encode16(commit_id)}")
     [^worktree_path, worktree_name] =
       output
     |> String.split(["\n", "\r"], trim: true)
     |> Enum.at(0)
     |> (&(Regex.run(worktree_add_regex, &1, capture: ~W[path id]a))).()
-    git_worktree_dir = ManualCommands.exec("readlink -f $(git rev-parse --git-dir)/worktrees/#{worktree_name}")
+    git_worktree_dir = ManualCommands.exec!("readlink -f $(git rev-parse --git-dir)/worktrees/#{worktree_name}")
     ~m{%Worktree repo worktree_name worktree_path git_worktree_dir}a
   end
 

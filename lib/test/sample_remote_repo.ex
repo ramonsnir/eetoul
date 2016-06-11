@@ -13,7 +13,7 @@ defmodule Eetoul.Test.SampleRemoteRepo do
                                             "second-release" => "checkout first-release\n",
                                             ".archive/ancient-release" => "checkout no-commit\n"})
     {:ok, _ref} = Reference.create repo, "refs/heads/eetoul-spec", commit
-    ManualCommands.exec "git remote add origin \"#{File.cwd!}/#{remote_path}\""
+    ManualCommands.exec! "git remote add origin \"#{File.cwd!}/#{remote_path}\""
     {:ok, repo}
   end
 

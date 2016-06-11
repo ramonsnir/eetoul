@@ -34,7 +34,7 @@ defmodule Eetoul.Commands.SpecsPush do
               else
                 ""
               end
-      ManualCommands.exec("git push #{remote} eetoul-spec #{force}")
+      ManualCommands.exec!("git push #{remote} eetoul-spec #{force}")
       |> String.replace(~r/\n$/, "")
       |> IO.puts
     end
