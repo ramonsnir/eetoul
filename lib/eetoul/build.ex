@@ -79,7 +79,7 @@ defmodule Eetoul.Build do
         reformat_merge_commit repo, ref, merged_commit_id
       _ ->
         if options[:output] == :normal do
-          IO.puts Colorful.string("Failure.", ~W[red])
+          IO.puts :stderr, Colorful.string("Failure when taking \"#{ref}\".", ~W[red])
         end
         raise TakeError, message: "Could not take branch \"#{ref}\"."
     end
