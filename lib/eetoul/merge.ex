@@ -13,7 +13,9 @@ defmodule Eetoul.Merge do
         |> Base.decode16!(case: :mixed)
         :ok = Worktree.remove worktree
         {:ok, result_commit_id}
-      :error -> :error
+      :error ->
+        :ok = Worktree.remove worktree
+        :error
     end
   end
 end
