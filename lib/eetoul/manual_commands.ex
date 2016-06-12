@@ -1,4 +1,5 @@
 defmodule Eetoul.ManualCommands do
+  use Geef
   import ShortMaps
   alias Eetoul.Worktree
 
@@ -23,6 +24,11 @@ defmodule Eetoul.ManualCommands do
   @doc ""
   def exec ~m{%Worktree worktree_path}a, command do
     do_exec worktree_path, command
+  end
+
+  @doc ""
+  def exec repo, command do
+    do_exec Repository.gitdir(repo), command
   end
 
   defp do_exec wd, command do
