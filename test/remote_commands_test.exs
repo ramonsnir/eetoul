@@ -4,6 +4,7 @@ defmodule EetoulRemoteCommandsTest do
   alias Eetoul.Utils
   alias Eetoul.CLI
   alias Eetoul.ManualCommands
+  alias Eetoul.RecordedConflictResolutions
   alias Eetoul.Test.SampleRemoteRepo
 
   setup_all do
@@ -30,10 +31,24 @@ defmodule EetoulRemoteCommandsTest do
       CLI.run_command meta.repo, ~W[specs-push --remote origin]
     end
     assert %{stderr: ""} = capture_io(call)
+    expected_eetoul_spec = get_commit_id_from_reference "eetoul-spec"
+    expected_eetoul_rcr = get_commit_id_from_reference RecordedConflictResolutions.rcr_branch
     expected_value =
-      ManualCommands.exec!("git show eetoul-spec --format=format:%H")
+      [
+        "#{expected_eetoul_spec}\trefs/heads/eetoul-spec",
+        "#{expected_eetoul_rcr}\t#{RecordedConflictResolutions.rcr_reference}",
+      ]
+    |> Enum.sort
+    found_value =
+      ManualCommands.exec!("git ls-remote origin")
+    |> String.split(["\n", "\r"], trim: true)
+    |> Enum.sort
+    assert expected_value == found_value
+  end
+
+  defp get_commit_id_from_reference ref do
+    ManualCommands.exec!("git show #{ref} --format=format:%H")
     |> String.split(["\n", "\r"], trim: true)
     |> Enum.at(0)
-    assert "#{expected_value}\trefs/heads/eetoul-spec\n" == ManualCommands.exec!("git ls-remote origin")
   end
 end

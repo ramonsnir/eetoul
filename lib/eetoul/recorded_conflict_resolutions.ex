@@ -14,5 +14,8 @@ defmodule Eetoul.RecordedConflictResolutions do
   end
 
   @doc ""
-  def rcr_reference, do: "refs/heads/eetoul-recorded-conflict-resolutions"
+  def rcr_branch, do: "eetoul-recorded-conflict-resolutions"
+
+  @doc ""
+  def rcr_reference, do: "refs/heads/#{rcr_branch}"
 end

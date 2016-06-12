@@ -3,6 +3,7 @@ defmodule Eetoul.Commands.SpecsPush do
   use Geef
   alias Eetoul.Colorful
   alias Eetoul.ManualCommands
+  alias Eetoul.RecordedConflictResolutions
 
   def description, do: "pushes the Eetoul spec branch to its default remote"
 
@@ -30,11 +31,11 @@ defmodule Eetoul.Commands.SpecsPush do
       IO.puts :stderr, Colorful.string("Cannot push without a default remote set.", ~W[red]a)
     else
       force = if args[:force] do
-                "--force"
-              else
-                ""
-              end
-      ManualCommands.exec!("git push #{remote} eetoul-spec #{force}")
+        "--force"
+      else
+        ""
+      end
+      ManualCommands.exec!("git push #{remote} eetoul-spec #{RecordedConflictResolutions.rcr_branch} #{force}")
       |> String.replace(~r/\n$/, "")
       |> IO.puts
     end

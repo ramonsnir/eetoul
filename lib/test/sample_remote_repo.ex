@@ -1,6 +1,7 @@
 defmodule Eetoul.Test.SampleRemoteRepo do
   use Geef
   alias Eetoul.ManualCommands
+  alias Eetoul.RecordedConflictResolutions
   alias Eetoul.RepoUtils
 
   @doc ""
@@ -13,6 +14,8 @@ defmodule Eetoul.Test.SampleRemoteRepo do
                                             "second-release" => "checkout first-release\n",
                                             ".archive/ancient-release" => "checkout no-commit\n"})
     {:ok, _ref} = Reference.create repo, "refs/heads/eetoul-spec", commit
+    {:ok, commit} = RepoUtils.make_commit(repo, "Eetoul RCR", %{})
+    {:ok, _ref} = Reference.create repo, RecordedConflictResolutions.rcr_reference, commit
     ManualCommands.exec! "git remote add origin \"#{File.cwd!}/#{remote_path}\""
     {:ok, repo}
   end
