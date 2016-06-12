@@ -48,4 +48,4 @@ If your deployment procedured isn't configured to make the latest `eetoul` branc
 
 ## Conflict Resolution Recording
 
-Based on git's own `rerere` feature, `eetoul` comes with its own (hopefully) superior conflict resolution mechanism. In its simplest form, it keeps along the commit tree of the branch `eetoul-recorded-conflict-resolutions` commits that assist it in reapplying resolutions of previously seen conflicts.
+Based on git's own `rerere` feature, `eetoul` comes with its own (hopefully) superior conflict resolution mechanism. In its naïve form, it keeps along the commit tree of the branch `eetoul-recorded-conflict-resolutions` commits that assist it in reapplying resolutions of previously seen conflicts.
