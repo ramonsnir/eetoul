@@ -23,40 +23,44 @@ defmodule Eetoul.Spec do
     |> Enum.map(&(String.split(&1, "#")))
     |> Enum.map(&(Enum.at(&1, 0)))
     |> Enum.map(&parse_line/1)
+    |> Enum.map(fn {a, b, c} -> validate_and_translate_line a, b, c end)
   end
 
-  defp parse_line line do
-    [command, reference, message] =
-      case String.split(line, " ", parts: 3, trim: true) do
-        [command] -> [command, nil, nil]
-        [command, reference] -> [command, reference, nil]
-        all -> all
-      end
-    validate_argument = fn arg_name, arg_value, required ->
-      if arg_value == nil && required do
-        raise ParseError, message: "`#{command}` expects a #{arg_name} argument."
-      end
-      if arg_value != nil && !required do
-        raise ParseError, message: "`#{command}` does not expect a #{arg_name} argument."
-      end
+  def parse_line line do
+    case String.split(line, " ", parts: 3, trim: true) do
+      [command] -> {command, nil, nil}
+      [command, reference] -> {command, reference, nil}
+      all -> List.to_tuple all
     end
+  end
+
+  defp validate_and_translate_line command, reference, message do
     case command do
       "checkout" ->
-        validate_argument.(:reference, reference, true)
-        validate_argument.(:message, message, false)
+        validate_argument command, :reference, reference, true
+        validate_argument command, :message, message, false
         {:checkout, reference}
       "take" ->
-        validate_argument.(:reference, reference, true)
-        validate_argument.(:message, message, true)
+        validate_argument command, :reference, reference, true
+        validate_argument command, :message, message, true
         {:take, reference, {:squash, message}}
       "take-merge" ->
-        validate_argument.(:reference, reference, true)
-        validate_argument.(:message, message, false)
+        validate_argument command, :reference, reference, true
+        validate_argument command, :message, message, false
         {:take, reference, :merge}
       "take-rebase" ->
-        validate_argument.(:reference, reference, true)
-        validate_argument.(:message, message, false)
+        validate_argument command, :reference, reference, true
+        validate_argument command, :message, message, false
         {:take, reference, :rebase}
+    end
+  end
+
+  defp validate_argument command, arg_name, arg_value, required do
+    if arg_value == nil && required do
+      raise ParseError, message: "`#{command}` expects a #{arg_name} argument."
+    end
+    if arg_value != nil && !required do
+      raise ParseError, message: "`#{command}` does not expect a #{arg_name} argument."
     end
   end
 

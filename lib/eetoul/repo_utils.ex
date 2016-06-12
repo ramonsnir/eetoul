@@ -7,7 +7,7 @@ defmodule Eetoul.RepoUtils do
   @doc ""
   def make_commit repo, message, files, parents \\ [], sig \\ nil do
     unless sig do
-      sig = Signature.now "Eetoul", "eetoul@eetoul"
+      sig = %Signature{name: "Eetoul", email: "eetoul@eetoul", time: {{1000, 0, 0}, 0}}
     end
     {:ok, tree_id} = write_tree repo, files
     Commit.create repo, sig, sig, message, tree_id, parents
@@ -33,13 +33,7 @@ defmodule Eetoul.RepoUtils do
     maybe_resolved_parent = resolve_reference repo, reference
     maybe_files =
       case maybe_resolved_parent do
-        {:ok, _} ->
-          Error.m do
-            parent <- maybe_resolved_parent
-            tree <- Commit.tree parent
-            files <- read_tree repo, tree
-            return files
-          end
+        {:ok, parent} -> files_from_commit repo, parent
         _ ->
           {:ok, %{}}
       end
@@ -67,6 +61,14 @@ defmodule Eetoul.RepoUtils do
     end
   end
 
+  defp files_from_commit repo, commit do
+    Error.m do
+      tree <- Commit.tree commit
+      files <- read_tree repo, tree
+      return files
+    end
+  end
+
   defp write_tree repo, files do
     {:ok, odb} = Repository.odb repo
     {:ok, idx} = Index.new
@@ -77,6 +79,7 @@ defmodule Eetoul.RepoUtils do
     Index.write_tree idx, repo
   end
 
+  @lint {Credo.Check.Readability.LargeNumbers, false}
   defp write_entry odb, path, ~m{mode content}a do
     {now_mega, now_secs, _} = :os.timestamp
     time = now_mega * 1_000_000 + now_secs
@@ -112,8 +115,8 @@ defmodule Eetoul.RepoUtils do
     Enum.flat_map files, &(&1)
   end
 
-  defp resolve_reference _repo, (commit = %Object{type: :commit}) do
-    {:ok, commit}
+  defp resolve_reference _repo, (ci = %Object{type: :commit}) do
+    {:ok, ci}
   end
   defp resolve_reference repo, reference do
     Error.m do

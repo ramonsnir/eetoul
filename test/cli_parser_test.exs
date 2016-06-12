@@ -1,22 +1,13 @@
 defmodule EetoulCLIParserTest do
   use ExUnit.Case, async: true
-  alias Eetoul.Utils
   alias Eetoul.CLI
   alias Eetoul.CLI.ParseError
   alias Eetoul.Test.SampleSpecRepo
 
   setup_all do
-    Utils.seed
-    path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
-    File.rm_rf path
-    on_exit fn -> File.rm_rf path end
-    case SampleSpecRepo.create path do
-      {:ok, repo} ->
-        {:ok, repo: repo}
-      e -> e
-    end
+    SampleSpecRepo.setup(&on_exit/1)
   end
-  
+
   test "`edit <release>`", meta do
     assert %{release: "first-release"} ==
       CLI.test_cli_argument_parser(meta.repo, ~W[edit first-release])

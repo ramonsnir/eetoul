@@ -26,17 +26,21 @@ defmodule Eetoul.Commands.AddTo do
   end
 
   def run repo, args do
-    {:ok, _} = RepoUtils.commit repo, "refs/heads/eetoul-spec", "added #{args.branch} to release \"#{args.release}\"", fn files ->
-      Map.update! files, args.release, fn file = ~m{content}a ->
-        new_line =
-          case args do
-            ~m{branch message}a -> "take #{branch} #{message}\n"
-            %{branch: branch, merge: true} -> "take-merge #{branch}\n"
-            %{branch: branch, rebase: true} -> "take-rebase #{branch}\n"
-          end
-        Map.put file, :content, content <> new_line
-      end
+    {:ok, _} =
+      RepoUtils.commit repo, "refs/heads/eetoul-spec", "added #{args.branch} to release \"#{args.release}\"",
+    fn files ->
+      Map.update! files, args.release, &(add_to_spec_file args, &1)
     end
     IO.puts "Added \"#{args.branch}\" to release \"#{args.release}\"."
+  end
+
+  defp add_to_spec_file args, file = ~m{content}a do
+    new_line =
+      case args do
+        ~m{branch message}a -> "take #{branch} #{message}\n"
+        %{branch: branch, merge: true} -> "take-merge #{branch}\n"
+        %{branch: branch, rebase: true} -> "take-rebase #{branch}\n"
+      end
+    Map.put file, :content, content <> new_line
   end
 end

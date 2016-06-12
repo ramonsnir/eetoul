@@ -1,4 +1,6 @@
-%{"colorful": {:hex, :colorful, "0.6.0"},
-  "geef": {:git, "https://github.com/ramonsnir/geef.git", "5350b1fb783119d1d9e9ca5ef4c5b6d7381a0261", []},
-  "monad": {:hex, :monad, "1.0.5"},
-  "short_maps": {:hex, :short_maps, "0.1.1"}}
+%{"bunt": {:hex, :bunt, "0.1.6", "5d95a6882f73f3b9969fdfd1953798046664e6f77ec4e486e6fafc7caad97c6f", [:mix], []},
+  "colorful": {:hex, :colorful, "0.6.0", "52005f84776479bc2ca292fe542e8e00f696048c09e61ba412fdd19db6c7b98e", [:mix], []},
+  "credo": {:hex, :credo, "0.4.2", "08da8c8183128464af063b79ba580ef3af1e090288ee6e6ee7cd1507af6a8566", [:mix], [{:bunt, "~> 0.1.6", [hex: :bunt, optional: false]}]},
+  "geef": {:git, "https://github.com/ramonsnir/geef.git", "18f15cb6f4d08ef02ca514522f2c16876de9af1e", []},
+  "monad": {:hex, :monad, "1.0.5", "bd02263a8dad0894433ca3283ebb6f71a55799e1cd17bda1e8b2ea9e14eeb9c5", [:mix], []},
+  "short_maps": {:hex, :short_maps, "0.1.1", "8f32226eeb54df6ebb86efd615e84db57d51934efa0b45f0b0482296993e369d", [:mix], []}}

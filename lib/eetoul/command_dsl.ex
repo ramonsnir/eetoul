@@ -57,7 +57,7 @@ defmodule Eetoul.CommandDSL do
   @doc ""
   def get_module_cli_name module do
     # in PascalCase
-    command_name = 
+    command_name =
       module
     |> Atom.to_string
     |> String.split(".")
@@ -70,51 +70,51 @@ defmodule Eetoul.CommandDSL do
   end
 
   @doc ""
-  defmacro release name do
+  defmacro release arg_name do
     quote do
-      var!(args) = [{:release, unquote(name), :existing} | var!(args)]
+      var!(args) = [{:release, unquote(arg_name), :existing} | var!(args)]
     end
   end
 
   @doc ""
-  defmacro new_release name do
+  defmacro new_release arg_name do
     quote do
-      var!(args) = [{:release, unquote(name), :new} | var!(args)]
+      var!(args) = [{:release, unquote(arg_name), :new} | var!(args)]
     end
   end
 
   @doc ""
-  defmacro archived_release name do
+  defmacro archived_release arg_name do
     quote do
-      var!(args) = [{:release, unquote(name), :archived} | var!(args)]
+      var!(args) = [{:release, unquote(arg_name), :archived} | var!(args)]
     end
   end
 
   @doc ""
-  defmacro reference name do
+  defmacro reference arg_name do
     quote do
-      var!(args) = [{:reference, unquote(name)} | var!(args)]
+      var!(args) = [{:reference, unquote(arg_name)} | var!(args)]
     end
   end
 
   @doc ""
-  defmacro flag name do
+  defmacro flag arg_name do
     quote do
       var!(args) = case var!(args) do
                      [{:options, options} | rest] ->
-                       [{:options, [{unquote(name), :boolean} | options]} | rest]
-                     rest -> [{:options, [{unquote(name), :boolean}]} | rest]
+                       [{:options, [{unquote(arg_name), :boolean} | options]} | rest]
+                     rest -> [{:options, [{unquote(arg_name), :boolean}]} | rest]
                    end
     end
   end
 
   @doc ""
-  defmacro string name do
+  defmacro string arg_name do
     quote do
       var!(args) = case var!(args) do
                      [{:options, options} | rest] ->
-                       [{:options, [{unquote(name), :string} | options]} | rest]
-                     rest -> [{:options, [{unquote(name), :string}]} | rest]
+                       [{:options, [{unquote(arg_name), :string} | options]} | rest]
+                     rest -> [{:options, [{unquote(arg_name), :string}]} | rest]
                    end
     end
   end

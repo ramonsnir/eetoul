@@ -1,6 +1,7 @@
 defmodule Eetoul.Test.SampleSpecRepo do
   use Geef
   alias Eetoul.RepoUtils
+  alias Eetoul.Utils
 
   @doc ""
   def create path do
@@ -22,5 +23,17 @@ defmodule Eetoul.Test.SampleSpecRepo do
     {:ok, _ref} = Reference.create repo, "refs/heads/first-branch", commit
 
     {:ok, repo}
+  end
+
+  def setup on_exit do
+    Utils.seed
+    path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
+    File.rm_rf path
+    on_exit.(fn -> File.rm_rf path end)
+    case create path do
+      {:ok, repo} ->
+        {:ok, repo: repo}
+      e -> e
+    end
   end
 end
