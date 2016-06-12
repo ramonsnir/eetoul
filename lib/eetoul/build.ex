@@ -81,7 +81,7 @@ defmodule Eetoul.Build do
         if options[:output] == :normal do
           IO.puts Colorful.string("Failure.", ~W[red])
         end
-        raise TakeError
+        raise TakeError, message: "Could not take branch \"#{ref}\"."
     end
   end
 

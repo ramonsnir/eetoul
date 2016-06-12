@@ -4,6 +4,7 @@ defmodule EetoulBuildTest do
   alias Eetoul.Utils
   alias Eetoul.Build
   alias Eetoul.Build.ReferenceError
+  alias Eetoul.Build.TakeError
   alias Eetoul.Test.SampleTreeRepo
 
   setup_all do
@@ -54,11 +55,18 @@ defmodule EetoulBuildTest do
     assert expected == found
   end
 
-  test "build with a recoded conflict resolution", meta do
+  test "build WITH a recorded conflict resolution", meta do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/expected-test-release-conflict"
     assert :ok = Build.build(meta.repo, "test-release-conflict",
                              target_name: "refs/heads/test-release-conflict", output: :quiet)
     {:ok, %Reference{target: found}} = Reference.lookup meta.repo, "refs/heads/test-release-conflict"
     assert expected == found
+  end
+
+  test "build withOUT a recorded conflict resolution", meta do
+    assert_raise TakeError, "Could not take branch \"fifth\".", fn ->
+      Build.build(meta.repo, "test-release-conflict-failure",
+                  output: :quiet)
+    end
   end
 end

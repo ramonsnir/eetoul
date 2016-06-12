@@ -139,6 +139,7 @@ take-merge fifth
         "test-release-take" => test_release_take,
         "test-release-merge" => test_release_merge,
         "test-release-conflict" => test_release_conflict,
+        "test-release-conflict-failure" => test_release_conflict,
         "test-release-multiple" => test_release_multiple,
       },
       [])
