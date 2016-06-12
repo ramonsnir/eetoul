@@ -1,8 +1,6 @@
-[ ![Codeship Status for ramonsnir/eetoul](https://codeship.com/projects/d6637e90-dec4-0132-d9d6-465ff4e7e511/status?branch=master)](https://codeship.com/projects/80437)
-
 # Eetoul
 
-Ramon Snir (c) 2015 [MIT License]
+Ramon Snir (c) 2016 [MIT License]
 
 A declarative tool for creating integration branches in git
 
