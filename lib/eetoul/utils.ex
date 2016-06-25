@@ -1,9 +1,5 @@
 defmodule Eetoul.Utils do
   def seed do
-    :random.seed(
-      :erlang.phash2([node]),
-      :erlang.monotonic_time,
-      :erlang.unique_integer
-    )
+    :rand.seed(:exs1024)
   end
 end

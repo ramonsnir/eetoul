@@ -4,7 +4,7 @@ defmodule Eetoul.Mixfile do
   def project do
     [app: :eetoul,
      version: "0.1.0",
-     elixir: "~> 1.2.5",
+     elixir: "~> 1.3.0",
      deps: deps,
      default_task: "escript.build",
      escript: escript,

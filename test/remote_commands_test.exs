@@ -13,8 +13,8 @@ defmodule EetoulRemoteCommandsTest do
   end
 
   setup do
-    path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
-    remote_path = "tmp-#{__MODULE__}-remote-#{:random.uniform 1000000}"
+    path = "tmp-#{__MODULE__}-#{:rand.uniform 1000000}"
+    remote_path = "tmp-#{__MODULE__}-remote-#{:rand.uniform 1000000}"
     File.rm_rf path; File.rm_rf remote_path
     on_exit fn -> File.rm_rf path; File.rm_rf remote_path end
     Application.put_env :eetoul, :git_path, path

@@ -9,7 +9,7 @@ defmodule EetoulBuildTest do
 
   setup_all do
     Utils.seed
-    path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
+    path = "tmp-#{__MODULE__}-#{:rand.uniform 1000000}"
     File.rm_rf path
     on_exit fn -> File.rm_rf path end
     Application.put_env :eetoul, :git_path, path

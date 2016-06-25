@@ -11,10 +11,10 @@ defmodule EetoulSpecTest do
 
   setup_all do
     Utils.seed
-    tree_path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
+    tree_path = "tmp-#{__MODULE__}-#{:rand.uniform 1000000}"
     File.rm_rf tree_path
     on_exit fn -> File.rm_rf tree_path end
-    spec_path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
+    spec_path = "tmp-#{__MODULE__}-#{:rand.uniform 1000000}"
     File.rm_rf spec_path
     on_exit fn -> File.rm_rf spec_path end
 

@@ -41,7 +41,7 @@ defmodule Eetoul.CommandDSL do
 
   @doc ""
   defmacro validate error_message, do: block do
-    id = :"__validation_#{:random.uniform(10000)}"
+    id = :"__validation_#{:rand.uniform(10000)}"
     quote do
       def unquote(id)(args) do
         var!(args) = args

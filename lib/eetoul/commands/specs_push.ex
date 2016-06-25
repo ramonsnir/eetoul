@@ -16,16 +16,19 @@ defmodule Eetoul.Commands.SpecsPush do
     {:ok, repo_config} = Repository.config repo
     remote =
       case Config.get_string(repo_config, "branch.eetoul-spec.remote") do
-        {:ok, remote} -> remote
+        {:ok, r} -> r
         {:error, "Config value 'branch.eetoul-spec.remote' was not found"} -> nil
       end
+    remote =
     if args[:remote] do
       if remote != nil do
         IO.puts :stderr, Colorful.string("Warning: overriding default remote #{remote}.", ~W[yellow faint]a)
       else
         Config.set repo_config, "branch.eetoul-spec.remote", args[:remote]
       end
-      remote = args[:remote]
+      args[:remote]
+    else
+      remote
     end
     if remote == nil do
       IO.puts :stderr, Colorful.string("Cannot push without a default remote set.", ~W[red]a)

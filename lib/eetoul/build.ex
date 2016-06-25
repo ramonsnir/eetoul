@@ -115,6 +115,6 @@ defmodule Eetoul.Build do
   end
 
   defp random_reference_name do
-    "refs/heads/tmp-reference-#{:random.uniform 1000000}"
+    "refs/heads/tmp-reference-#{:rand.uniform 1000000}"
   end
 end

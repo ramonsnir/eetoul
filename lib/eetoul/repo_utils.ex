@@ -6,9 +6,7 @@ defmodule Eetoul.RepoUtils do
 
   @doc ""
   def make_commit repo, message, files, parents \\ [], sig \\ nil do
-    unless sig do
-      sig = %Signature{name: "Eetoul", email: "eetoul@eetoul", time: {{1000, 0, 0}, 0}}
-    end
+    sig = sig_or_default sig
     {:ok, tree_id} = write_tree repo, files
     Commit.create repo, sig, sig, message, tree_id, parents
   end
@@ -27,9 +25,7 @@ defmodule Eetoul.RepoUtils do
 
   @doc ""
   def commit repo, reference, message, sig \\ nil, transformation do
-    unless sig do
-      sig = Signature.now "Eetoul", "eetoul@eetoul"
-    end
+    sig = sig_or_default sig
     maybe_resolved_parent = resolve_reference repo, reference
     maybe_files =
       case maybe_resolved_parent do
@@ -99,8 +95,11 @@ defmodule Eetoul.RepoUtils do
 
   defp read_tree repo, tree, path do
     files = for ~m{%TreeEntry name mode type id}a <- tree do
+      name =
       if path != "" do
-        name = "#{path}/#{name}"
+        "#{path}/#{name}"
+      else
+        name
       end
       case type do
         :blob ->
@@ -123,6 +122,14 @@ defmodule Eetoul.RepoUtils do
       %Reference{target: commit_id} <- Reference.dwim(repo, reference)
       commit <- Commit.lookup(repo, commit_id)
       return commit
+    end
+  end
+
+  defp sig_or_default sig do
+    if sig do
+      sig
+    else
+      %Signature{name: "Eetoul", email: "eetoul@eetoul", time: {{1000, 0, 0}, 0}}
     end
   end
 end

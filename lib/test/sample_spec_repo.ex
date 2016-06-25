@@ -27,7 +27,7 @@ defmodule Eetoul.Test.SampleSpecRepo do
 
   def setup on_exit do
     Utils.seed
-    path = "tmp-#{__MODULE__}-#{:random.uniform 1000000}"
+    path = "tmp-#{__MODULE__}-#{:rand.uniform 1000000}"
     File.rm_rf path
     on_exit.(fn -> File.rm_rf path end)
     case create path do

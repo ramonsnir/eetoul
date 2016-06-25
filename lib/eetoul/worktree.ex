@@ -6,7 +6,7 @@ defmodule Eetoul.Worktree do
   alias Eetoul.ManualCommands
 
   def create repo, commit_id do
-    worktree_path = "/tmp/eetoul-merge-#{:random.uniform 1000000}"
+    worktree_path = "/tmp/eetoul-merge-#{:rand.uniform 1000000}"
     create repo, worktree_path, commit_id
   end
 
