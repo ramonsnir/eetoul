@@ -55,7 +55,7 @@ defmodule EetoulBuildTest do
     assert expected == found
   end
 
-  test "build WITH a recorded conflict resolution", meta do
+  test "build WITH an exact recorded conflict resolution", meta do
     {:ok, %Reference{target: expected}} = Reference.lookup meta.repo, "refs/tags/expected-test-release-conflict"
     assert :ok = Build.build(meta.repo, "test-release-conflict",
                              target_name: "refs/heads/test-release-conflict", output: :quiet)
