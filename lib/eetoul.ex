@@ -26,6 +26,6 @@ defmodule Eetoul do
     else
       {:ok, p} = File.cwd
       p
-    end  
+    end
   end
 end

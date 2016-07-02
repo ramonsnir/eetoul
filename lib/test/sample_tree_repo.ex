@@ -146,7 +146,7 @@ take-merge fifth
     {:ok, _ref} = Reference.create repo, "refs/heads/eetoul-spec", spec_commit
 
     conflict_fifth_key =
-      "test-release-conflict/fifth/" <>
+      "test-release-conflict/exact/fifth/" <>
     "#{Base.encode16 expected_test_release_conflict_step_a}/#{Base.encode16 fifth_commit}"
     {:ok, rcr_commit} = RepoUtils.make_commit(
       repo, "",

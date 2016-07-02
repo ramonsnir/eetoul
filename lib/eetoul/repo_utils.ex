@@ -24,6 +24,17 @@ defmodule Eetoul.RepoUtils do
   end
 
   @doc ""
+  def read_commit repo, reference do
+    Error.m do
+      commit <- resolve_reference repo, reference
+      files <- files_from_commit repo, commit
+      return (files
+      |> Enum.map(fn {k, v} -> {k, v.content} end)
+      |> Enum.into(%{}))
+    end
+  end
+
+  @doc ""
   def commit repo, reference, message, sig \\ nil, transformation do
     sig = sig_or_default sig
     maybe_resolved_parent = resolve_reference repo, reference
