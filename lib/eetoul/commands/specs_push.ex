@@ -37,7 +37,6 @@ defmodule Eetoul.Commands.SpecsPush do
         {:ok, r} -> r
         {:error, "Config value 'branch.eetoul-spec.remote' was not found"} -> nil
       end
-    remote =
     if manual_remote do
       if remote != nil do
         IO.puts :stderr, Colorful.string("Warning: overriding default remote #{remote}.", ~W[yellow faint]a)

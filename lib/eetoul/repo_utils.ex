@@ -35,7 +35,7 @@ defmodule Eetoul.RepoUtils do
   end
 
   @doc ""
-  def commit repo, reference, message, sig \\ nil, transformation do
+  def commit repo, reference, message, transformation, extra_parents \\ [], sig \\ nil do
     sig = sig_or_default sig
     maybe_resolved_parent = resolve_reference repo, reference
     maybe_files =
@@ -53,7 +53,7 @@ defmodule Eetoul.RepoUtils do
                    {:ok, ~m{%Object id}a} -> {:ok, [id]}
                    _ -> {:ok, []}
                  end
-      commit <- make_commit repo, message, files, parents, sig
+      commit <- make_commit repo, message, files, (parents ++ extra_parents), sig
       return commit
     end
     if String.starts_with?(reference, "refs/heads/") do
