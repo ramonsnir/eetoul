@@ -14,11 +14,10 @@
         {Credo.Check.Readability.ModuleDoc, false},
         {Credo.Check.Refactor.PipeChainStart, false},
 
-        # FIXME uncomment after credo fixes patterns bug #102
         {Credo.Check.Warning.NameRedeclarationByAssignment, false},
-        {Credo.Check.Warning.NameRedeclarationByCase, false}, # FIXME uncomment after credo fixes patterns bug #102
-        {Credo.Check.Warning.NameRedeclarationByDef, false}, # FIXME uncomment after credo fixes patterns bug #102
-        {Credo.Check.Warning.NameRedeclarationByFn, false}, # FIXME uncomment after credo fixes patterns bug #102
+        {Credo.Check.Warning.NameRedeclarationByCase, false},
+        {Credo.Check.Warning.NameRedeclarationByDef, false},
+        {Credo.Check.Warning.NameRedeclarationByFn, false},
       ]
     }
   ]

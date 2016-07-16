@@ -1,6 +1,6 @@
 %{"bunt": {:hex, :bunt, "0.1.6", "5d95a6882f73f3b9969fdfd1953798046664e6f77ec4e486e6fafc7caad97c6f", [:mix], []},
   "colorful": {:hex, :colorful, "0.6.0", "52005f84776479bc2ca292fe542e8e00f696048c09e61ba412fdd19db6c7b98e", [:mix], []},
-  "credo": {:hex, :credo, "0.4.2", "08da8c8183128464af063b79ba580ef3af1e090288ee6e6ee7cd1507af6a8566", [:mix], [{:bunt, "~> 0.1.6", [hex: :bunt, optional: false]}]},
-  "geef": {:git, "https://github.com/ramonsnir/geef.git", "e8735e56adbd5acb688e04ce9ba4ca31315a8cb3", []},
+  "credo": {:git, "https://github.com/rrrene/credo.git", "c5a2103b409feb86e602cae6d2ba122e0ee67659", []},
+  "geef": {:git, "https://github.com/ramonsnir/geef.git", "fe2ee1b78c3b855991052218aede30cfe8eb22f5", []},
   "monad": {:hex, :monad, "1.0.5", "bd02263a8dad0894433ca3283ebb6f71a55799e1cd17bda1e8b2ea9e14eeb9c5", [:mix], []},
   "short_maps": {:hex, :short_maps, "0.1.1", "8f32226eeb54df6ebb86efd615e84db57d51934efa0b45f0b0482296993e369d", [:mix], []}}
